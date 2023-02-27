@@ -3,7 +3,7 @@ import React from 'react';
 const Body = () => {
     return (
         <div className="container">
-            <div className="row row-cols-1 row-cols-md-3 g-5 mt-md-3 mt-1">
+            <div className="row row-cols-1 row-cols-md-3 g-3 mt-md-3 mt-1">
                 <div className="col mt-4">
                     <div className="card h-100">
                         <div className="card-footer">
@@ -17,7 +17,7 @@ const Body = () => {
                         <img src="https://source.unsplash.com/800x600?man" className="card-img-top" alt="" />
                         <div className="card-body">
                             <p className="card-text">
-                                <span><strong> Name </strong></span>
+                            <span><strong> Name </strong></span>
                                 This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.
                             </p>
                         </div>
@@ -42,6 +42,7 @@ const Body = () => {
                         <img src="https://source.unsplash.com/800x600?girl" className="card-img-top" alt="" />
                         <div className="card-body">
                             <p className="card-text">
+                                <span><strong> Name </strong></span>
                                 This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.
                             </p>
                         </div>
@@ -66,6 +67,7 @@ const Body = () => {
                         <img src="https://source.unsplash.com/800x600?heroine" className="card-img-top" alt="" />
                         <div className="card-body">
                             <p className="card-text">
+                                <span><strong> Name </strong></span>
                                 This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.
                             </p>
                         </div>
