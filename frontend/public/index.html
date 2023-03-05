@@ -17,4 +17,29 @@
   <div id="root"></div>
 </body>
 
+<script>
+
+  const showPass = () => {
+    var x = document.getElementById("password");
+    var y = document.getElementById("cpassword");
+    if (x.type === "password" && y.type === "password") {
+      x.type = "text";
+      y.type = "text";
+    } else {
+      x.type = "password";
+      y.type = "password";
+    }
+  }
+
+  const showPass1 = () => {
+    var x = document.getElementById("password");
+    if (x.type === "password") {
+      x.type = "text";
+    } else {
+      x.type = "password";
+    }
+  }
+
+</script>
+
 </html>
