@@ -4,17 +4,26 @@ import { useState } from "react";
 import Navbar from "./Navbar";
 
 const Explore = () => {
-  const [img, setImg] = useState("");
+  const [search, setSearch] = useState("");
 
-  const inputEvent = (e) => {
-    const data = e.target.value;
-    console.log(data);
-    setImg(data);
+  const findUser = () => {
+    const res = fetch(`http://localhost:8000/getuser/${search}`, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        token: localStorage.getItem("token"),
+      },
+      credentials: "include",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setSearch({
+          users: data.users,
+        });
+        console.log(data);
+      });
   };
-
-  const findUser = (e) => {
-    console.log(e);
-  }
 
   return (
     <>
@@ -27,9 +36,11 @@ const Explore = () => {
               <input
                 type="text"
                 className="bg-light rounded-start form-control"
-                placeholder="Search user"
-                value={img}
-                onChange={inputEvent}
+                placeholder="Search User"
+                name="search"
+                id="search"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
               />
               <button
                 className="rounded-end bg-secondary text-light btn btn-outline-secondary"
@@ -41,6 +52,36 @@ const Explore = () => {
                 onClick={findUser}>
                 Search
               </button>
+            </div>
+          </div>
+        </div>
+
+        {/* show users  */}
+        <div className="row row-cols-3 row-cols-md-4 g-1">
+          <div className="col">
+            <div className="card h-100 w-50">
+              <div className="card-body">
+                {search.users &&
+                  search.users.map((user) => {
+                    return (
+                      <div className="card">
+                        <div className="card-body">
+                          <img
+                            src={user.profilephoto}
+                            className="card-img-top rounded-circle"
+                            alt="card"
+                          />
+                          <p className="card-title">{user.username}</p>
+                          <Link
+                            to={`/${user.username}`}
+                            className="btn btn-primary">
+                            View Profile
+                          </Link>
+                        </div>
+                      </div>
+                    );
+                  })}
+              </div>
             </div>
           </div>
         </div>

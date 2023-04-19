@@ -4,11 +4,8 @@ import Navbar from "./Navbar";
 
 const Profile = () => {
   const navigate = useNavigate();
-  const [userdata, setUserData] = useState({
-    username: "",
-    email: "",
-    password: "",
-  });
+  const [userdata, setUserData] = useState("");
+  const [userpost, setUserPost] = useState("");
 
   const callProfile = async () => {
     try {
@@ -23,14 +20,26 @@ const Profile = () => {
       });
 
       const data = await res.json();
-      console.log(data);
+
+      if (data.userpost === null) {
+        setUserPost([]);
+      } else {
+        setUserPost({
+          posts: data.userpost.posts,
+        });
+      }
 
       setUserData({
-        username: data.user.username,
-        email: data.user.email,
-        name: data.user.name,
+        username: data.userdetail.username,
+        name: data.userdetail.name,
+        bio: data.userdetail.bio,
+        followers: data.userdetail.followercount,
+        following: data.userdetail.followingcount,
+        profilePhoto: data.userdetail.profilephoto,
+        posts: data.userdetail.postcount,
       });
 
+      console.log(data);
       if (res.status !== 201) {
         const error = new Error(res.error);
         throw error;
@@ -53,7 +62,7 @@ const Profile = () => {
           <div className="col mt-3 ">
             <div className="text-center h-100">
               <img
-                src="https://source.unsplash.com/400x400?bollywood"
+                src={userdata.profilePhoto}
                 alt="profilePhoto"
                 className="rounded-circle w-50"
               />
@@ -62,23 +71,37 @@ const Profile = () => {
           <div className="col">
             <div>
               <div className="card-body mt-2">
-                <h4 className="card-title text-center">
-                  {userdata.username}
-                </h4>
+                <h4 className="card-title text-center">{userdata.username}</h4>
                 <div className="d-flex justify-content-between mt-3">
                   <p>
-                    <span className="fw-bold"> 22 </span> posts
+                    <span className="fw-bold"> {userdata.posts} </span> posts
                   </p>
                   <p>
-                    <span className="fw-bold"> 168 </span> followers
+                    <span className="fw-bold"> {userdata.followers} </span>
+                    followers
                   </p>
                   <p>
-                    <span className="fw-bold"> 132 </span> following
+                    <span className="fw-bold"> {userdata.following} </span>
+                    following
                   </p>
                 </div>
                 <div className="mt-0 mt-md-3">
                   <p className="fw-bold"> {userdata.name} </p>
-                  <p id="bio"> lorem20 </p>
+                  <p id="bio">
+                    <strong> {userdata.bio} </strong>
+                  </p>
+                </div>
+
+                {/* logout button  */}
+                <div className="d-flex justify-content-center">
+                  <button
+                    className="btn btn-danger"
+                    onClick={() => {
+                      localStorage.clear();
+                      navigate("/login");
+                    }}>
+                    Logout
+                  </button>
                 </div>
               </div>
             </div>
@@ -86,62 +109,25 @@ const Profile = () => {
         </div>
         <hr className="mt-md-4   mt-0" />
         <h3 className="mt-2 text-center"> {userdata.name} Posts </h3>
+
+        {/* User posts  */}
         <div className="row row-cols-3 row-cols-md-4 g-1 mt-md-3 mt-1">
-          <div className="col">
-            <div className="card h-100">
-              <Link to="https://source.unsplash.com/400x400?model">
-                <img
-                  src="https://source.unsplash.com/400x400?model"
-                  className="card-img-top"
-                  alt="card"
-                />
-              </Link>
-            </div>
-          </div>
-          <div className="col">
-            <div className="card h-100">
-              <Link to="https://source.unsplash.com/400x400?heroine">
-                <img
-                  src="https://source.unsplash.com/400x400?heroine"
-                  className="card-img-top"
-                  alt="card"
-                />
-              </Link>
-            </div>
-          </div>
-          <div className="col">
-            <div className="card h-100">
-              <Link to="https://source.unsplash.com/400x400?hollywood">
-                <img
-                  src="https://source.unsplash.com/400x400?hollywood"
-                  className="card-img-top"
-                  alt="card"
-                />
-              </Link>
-            </div>
-          </div>
-          <div className="col">
-            <div className="card h-100">
-              <Link to="https://source.unsplash.com/400x400?marvel">
-                <img
-                  src="https://source.unsplash.com/400x400?marvel"
-                  className="card-img-top"
-                  alt="card"
-                />
-              </Link>
-            </div>
-          </div>
-          <div className="col">
-            <div className="card h-100">
-              <Link to="https://source.unsplash.com/400x400?dcu">
-                <img
-                  src="https://source.unsplash.com/400x400?dcu"
-                  className="card-img-top"
-                  alt="card"
-                />
-              </Link>
-            </div>
-          </div>
+          {userpost.posts &&
+            userpost.posts.map((post) => {
+              return (
+                <div className="col" key={post._id}>
+                  <div className="card h-100">
+                    <Link to={`/post/${post._id}`}>
+                      <img
+                        src={post.post}
+                        className="card-img-top"
+                        alt="post"
+                      />
+                    </Link>
+                  </div>
+                </div>
+              );
+            })}
         </div>
       </div>
     </>

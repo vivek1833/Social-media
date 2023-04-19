@@ -1,7 +1,38 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Navbar from "./Navbar";
 
-const Body = () => {
+const Home = () => {
+  const navigate = useNavigate();
+
+  const callHome = async () => {
+    try {
+      const res = await fetch("http://localhost:8000/home", {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          token: localStorage.getItem("token"),
+        },
+        credentials: "include",
+      });
+
+      const data = await res.json();
+
+      if (res.status !== 201) {
+        const error = new Error(res.error);
+        throw error;
+      }
+    } catch (err) {
+      console.log(err.message);
+      navigate("/login");
+    }
+  };
+
+  useEffect(() => {
+    callHome();
+  }, []);
+
   return (
     <>
       <Navbar />
@@ -31,7 +62,8 @@ const Body = () => {
                   <span>
                     <strong> Name </strong>
                   </span>
-                  Caption of user... Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quo, nisi.
+                  Caption of user... Lorem ipsum dolor sit amet, consectetur
+                  adipisicing elit. Quo, nisi.
                 </p>
               </div>
               <div className="card-footer">
@@ -72,7 +104,8 @@ const Body = () => {
                   <span>
                     <strong> Name </strong>
                   </span>
-                  Caption of user... Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quo, nisi.
+                  Caption of user... Lorem ipsum dolor sit amet, consectetur
+                  adipisicing elit. Quo, nisi.
                 </p>
               </div>
               <div className="card-footer">
@@ -113,7 +146,8 @@ const Body = () => {
                   <span>
                     <strong> Name </strong>
                   </span>
-                  Caption of user... Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quo, nisi.
+                  Caption of user... Lorem ipsum dolor sit amet, consectetur
+                  adipisicing elit. Quo, nisi.
                 </p>
               </div>
               <div className="card-footer">
@@ -136,4 +170,4 @@ const Body = () => {
   );
 };
 
-export default Body;
+export default Home;

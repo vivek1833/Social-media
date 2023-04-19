@@ -25,9 +25,11 @@ const Post = () => {
     const res = await fetch("http://localhost:8000/post", {
       method: "POST",
       headers: {
+        Accept: "application/json",
         "Content-Type": "application/json",
         token: localStorage.getItem("token"),
       },
+      credentials: "include",
       body: JSON.stringify({
         post,
         caption,
@@ -51,13 +53,13 @@ const Post = () => {
         <form method="POST">
           <div className="form-row">
             <div className="form-group col-md-6">
-              <label for="post">Post</label>
+              <label htmlFor="post">Post</label>
               <input
                 type="email"
                 className="form-control"
                 id="post"
                 name="post"
-                placeholder="Enter your post here"
+                placeholder="Enter your post link here"
                 required={true}
                 value={user.post}
                 onChange={userInput}
@@ -67,7 +69,7 @@ const Post = () => {
 
           <div className="form-row">
             <div className="form-group col-md-6">
-              <label for="caption">Caption</label>
+              <label htmlFor="caption">Caption</label>
               <input
                 type="email"
                 className="form-control"
@@ -85,7 +87,7 @@ const Post = () => {
             type="submit"
             className="btn btn-primary"
             onClick={submitData}>
-            Sign in
+            Post
           </button>
         </form>
       </div>

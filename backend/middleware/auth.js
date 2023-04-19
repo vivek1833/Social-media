@@ -4,7 +4,6 @@ const User = require("../models/user")
 const auth = async (req, res, next) => {
     try {
         const token = req.headers.token;
-
         const verifyUser = verify(token, process.env.SecretKey);
         const currUser = await User.findOne({ _id: verifyUser._id });
 
@@ -14,7 +13,7 @@ const auth = async (req, res, next) => {
 
         req.token = token;
         req.user = currUser;
-        
+
         next();
 
     } catch (error) {

@@ -23,10 +23,42 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    date: {
-        type: Date,
-        default: Date.now,
+    profilephoto: {
+        type: String,
     },
+    bio: {
+        type: String
+    },
+    postcount: {
+        type: Number,
+    },
+    followercount: {
+        type: Number,
+    },
+    followingcount: {
+        type: Number,
+    },
+    posts: [{
+        post: {
+            type: String,
+        },
+        caption: {
+            type: String,
+        },
+        like: {
+            type: Number,
+
+        },
+        comments: [{
+            comment: {
+                type: String,
+            },
+        }],
+        date: {
+            type: Date,
+            default: Date.now,
+        }
+    }],
 });
 
 const User = new mongoose.model('USER', userSchema);
