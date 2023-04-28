@@ -38,27 +38,7 @@ const userSchema = new mongoose.Schema({
     followingcount: {
         type: Number,
     },
-    posts: [{
-        post: {
-            type: String,
-        },
-        caption: {
-            type: String,
-        },
-        like: {
-            type: Number,
-
-        },
-        comments: [{
-            comment: {
-                type: String,
-            },
-        }],
-        date: {
-            type: Date,
-            default: Date.now,
-        }
-    }],
+    
 });
 
 const User = new mongoose.model('USER', userSchema);

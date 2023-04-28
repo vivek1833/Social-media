@@ -25,7 +25,7 @@ const Profile = () => {
         setUserPost([]);
       } else {
         setUserPost({
-          posts: data.userpost.posts,
+          posts: data.userpost,
         });
       }
 
@@ -39,7 +39,6 @@ const Profile = () => {
         posts: data.userdetail.postcount,
       });
 
-      console.log(data);
       if (res.status !== 201) {
         const error = new Error(res.error);
         throw error;
@@ -72,6 +71,15 @@ const Profile = () => {
             <div>
               <div className="card-body mt-2">
                 <h4 className="card-title text-center">{userdata.username}</h4>
+                {/* edit profile button   */}
+                <div className="d-flex justify-content-center">
+                  <Link
+                    to="/editprofile"
+                    className="btn btn-primary"
+                    style={{ cursor: "pointer" }}>
+                    Edit Profile
+                  </Link>
+                </div>
                 <div className="d-flex justify-content-between mt-3">
                   <p>
                     <span className="fw-bold"> {userdata.posts} </span> posts

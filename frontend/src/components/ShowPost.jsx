@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import Navbar from "./Navbar";
 
 const ShowPost = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [currpost, setPost] = useState("");
+  const [comment, setComment] = useState("");
 
   const callPost = async () => {
     try {
@@ -20,14 +21,18 @@ const ShowPost = () => {
       });
 
       const data = await res.json();
-      console.log(data.userpost);
 
       setPost({
-        post: data.userpost[0].post,
-        caption: data.userpost[0].caption,
-        like: data.userpost[0].like,
-        comments: data.userpost[0].comments,
-        date: data.userpost[0].date,
+        username: data.userpost.username,
+        name: data.userpost.name,
+        profilephoto: data.userpost.profilephoto,
+        post: data.userpost.post,
+        caption: data.userpost.caption,
+        like: data.userpost.likes,
+        comments: data.userpost.comments,
+        likecount: data.userpost.likecount,
+        commentcount: data.userpost.commentcount,
+        date: data.userpost.date,
       });
 
       if (res.status !== 201) {
@@ -40,6 +45,32 @@ const ShowPost = () => {
     }
   };
 
+  const commentPost = async (id, comment) => {
+    try {
+      const res = await fetch(`http://localhost:8000/comment/${id}`, {
+        method: "PUT",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          token: localStorage.getItem("token"),
+        },
+        body: JSON.stringify({
+          comment: comment,
+        }),
+        credentials: "include",
+      });
+
+      const data = await res.json();
+
+      if (res.status === 201) {
+        window.alert(data.message);
+        navigate("/");
+      }
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
+
   useEffect(() => {
     callPost();
   }, []);
@@ -48,14 +79,17 @@ const ShowPost = () => {
     <>
       <Navbar />
       <div className="container my-4">
-        <h1>Your Post</h1>
+        <h1>{currpost.username} Post</h1>
         <div className="row">
           <div className="col-6">
             <div className="card w-50">
               <img src={currpost.post} className="card-img-top" alt="post" />
               <div className="card-body">
-                <p className="card-text">{currpost.caption}</p>
-                <p className="card-text">Likes: {currpost.like}</p>
+                <p className="card-text">
+                  <strong> {currpost.name} </strong>
+                  {currpost.caption}
+                </p>
+                <p className="card-text">Likes: {currpost.likecount}</p>
                 <p className="card-text">Date: {currpost.date}</p>
               </div>
             </div>
@@ -63,15 +97,49 @@ const ShowPost = () => {
           <div className="col-6">
             <div className="card w-100">
               <div className="card-body">
-                <p className="card-text">Comments:</p>
+                <p className="card-text">Comments: {currpost.commentcount}</p>
                 {currpost.comments &&
                   currpost.comments.map((comment) => {
                     return (
-                      <p className="card-text">
-                        {comment.username}: {comment.comment}
-                      </p>
+                      <div className="card w-100" key={comment._id}>
+                        <p className="card-text">
+                          {comment.user}: {comment.comment}
+                        </p>
+                      </div>
                     );
                   })}
+              </div>
+            </div>
+          </div>
+
+          {/* Add comment  */}
+          <div className="col-6">
+            <div className="card w-100">
+              <div className="card-body">
+                <form method="GET">
+                  <div className="mb-3">
+                    <label htmlFor="comment" className="form-label">
+                      Add Comment
+                    </label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="comment"
+                      name="comment"
+                      placeholder="Add Comment"
+                      value={comment}
+                      onChange={(e) => setComment(e.target.value)}
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    className="btn btn-primary"
+                    onClick={() => {
+                      commentPost(id, comment);
+                    }}>
+                    Submit
+                  </button>
+                </form>
               </div>
             </div>
           </div>

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Navbar from "./Navbar";
 
 const Post = () => {
@@ -41,7 +41,7 @@ const Post = () => {
     if (res.status === 400 || !data) {
       window.alert("Invalid Post");
     } else {
-      window.alert("Post Successful");
+      window.alert(data.message);
       navigate("/");
     }
   };
@@ -55,11 +55,12 @@ const Post = () => {
             <div className="form-group col-md-6">
               <label htmlFor="post">Post</label>
               <input
-                type="email"
+                type="text"
                 className="form-control"
                 id="post"
                 name="post"
                 placeholder="Enter your post link here"
+                autoComplete="off"
                 required={true}
                 value={user.post}
                 onChange={userInput}
@@ -71,13 +72,14 @@ const Post = () => {
             <div className="form-group col-md-6">
               <label htmlFor="caption">Caption</label>
               <input
-                type="email"
+                type="text"
                 className="form-control"
                 id="caption"
                 name="caption"
+                placeholder="Enter your caption here"
+                autoComplete="off"
                 required={true}
                 value={user.caption}
-                placeholder="Enter your caption here"
                 onChange={userInput}
               />
             </div>

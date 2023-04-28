@@ -1,9 +1,10 @@
-import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Navbar from "./Navbar";
 
 const Home = () => {
   const navigate = useNavigate();
+  const [user, setUser] = useState([]);
 
   const callHome = async () => {
     try {
@@ -19,6 +20,10 @@ const Home = () => {
 
       const data = await res.json();
 
+      setUser({
+        userdata: data.posts,
+      });
+
       if (res.status !== 201) {
         const error = new Error(res.error);
         throw error;
@@ -26,6 +31,33 @@ const Home = () => {
     } catch (err) {
       console.log(err.message);
       navigate("/login");
+    }
+  };
+
+  const likePost = async (_id) => {
+    try {
+      const res = await fetch(`http://localhost:8000/like/${_id}`, {
+        method: "PUT",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          token: localStorage.getItem("token"),
+        },
+        credentials: "include",
+      });
+
+      const data = await res.json();
+
+      setUser({
+        userdata: data.posts,
+      });
+
+      if (res.status !== 201) {
+        const error = new Error(res.error);
+        throw error;
+      }
+    } catch (err) {
+      console.log(err.message);
     }
   };
 
@@ -38,132 +70,74 @@ const Home = () => {
       <Navbar />
       <div className="container">
         <div className="row row-cols-1 row-cols-md-3 g-3 mt-md-3 mt-1">
-          <div className="col mt-4">
-            <div className="card h-100">
-              <div className="card-footer">
-                <div className="w-25 d-flex flex-row align-items-center">
-                  <img
-                    src="https://source.unsplash.com/400x400?man"
-                    className="img-fluid rounded-circle w-50"
-                    alt=""
-                  />
-                  <small className="ms-2"> Name </small>
-                  <small className="ms-1 text-muted"> • </small>
-                  <small className="ms-1 text-muted"> 6h </small>
+          {/* user detail starts  */}
+          {user.userdata &&
+            user.userdata.map((post) => {
+              return (
+                <div className="col mt-4" key={post._id}>
+                  <div className="card h-100">
+                    <div className="card-footer">
+                      <Link
+                        to={`/profile/${post.username}`}
+                        className="text-decoration-none text-dark"
+                        style={{ cursor: "pointer" }}>
+                        <div className="w-25 d-flex flex-row align-items-center">
+                          <img
+                            src={post.profilephoto}
+                            className="img-fluid rounded-circle w-50"
+                            alt="pic"
+                          />
+                          <small className="ms-2"> {post.name} </small>
+                          <small className="ms-1 text-muted"> • </small>
+                          <small className="ms-1 text-muted">{post.date}</small>
+                        </div>
+                      </Link>
+                    </div>
+                    <Link to={`/post/${post._id}`}>
+                      <img
+                        src={post.post}
+                        className="card-img-top"
+                        alt="postpic"
+                      />
+                    </Link>
+                    <div className="card-body">
+                      <p className="card-text">
+                        <span>
+                          <strong> {post.name} </strong>
+                        </span>
+                        {post.caption}
+                      </p>
+                    </div>
+                    <div className="card-footer">
+                      <button
+                        id="like"
+                        name="like"
+                        className="btn"
+                        onClick={() => {
+                          likePost(post._id);
+                        }}>
+                        <i className="bi bi-heart"></i>
+                      </button>
+                      <small className="text-muted text-end">
+                        {post.likecount} likes
+                      </small>
+
+                      <Link
+                        to={`/post/${post._id}`}
+                        className="text-decoration-none text-dark">
+                        <button className="btn">
+                          <i className="bi bi-chat"></i>
+                        </button>
+                        <small className="text-muted text-end">
+                          {post.commentcount} comments
+                        </small>
+                      </Link>
+                    </div>
+                  </div>
                 </div>
-              </div>
-              <img
-                src="https://source.unsplash.com/800x600?man"
-                className="card-img-top"
-                alt=""
-              />
-              <div className="card-body">
-                <p className="card-text">
-                  <span>
-                    <strong> Name </strong>
-                  </span>
-                  Caption of user... Lorem ipsum dolor sit amet, consectetur
-                  adipisicing elit. Quo, nisi.
-                </p>
-              </div>
-              <div className="card-footer">
-                <button className="btn">
-                  <i className="bi bi-heart"></i>
-                </button>
-                <button className="btn">
-                  <i className="bi bi-chat"></i>
-                </button>
-                <button className="btn">
-                  <i className="bi bi-share"></i>
-                </button>
-                <small className="text-muted text-end"> 2.8k likes </small>
-              </div>
-            </div>
-          </div>
-          <div className="col mt-4">
-            <div className="card h-100">
-              <div className="card-footer">
-                <div className="w-25 d-flex flex-row align-items-center">
-                  <img
-                    src="https://source.unsplash.com/400x400?girl"
-                    className="img-fluid rounded-circle w-50"
-                    alt=""
-                  />
-                  <small className="ms-2"> Name </small>
-                  <small className="ms-1 text-muted"> • </small>
-                  <small className="ms-1 text-muted"> 6h </small>
-                </div>
-              </div>
-              <img
-                src="https://source.unsplash.com/800x600?girl"
-                className="card-img-top"
-                alt=""
-              />
-              <div className="card-body">
-                <p className="card-text">
-                  <span>
-                    <strong> Name </strong>
-                  </span>
-                  Caption of user... Lorem ipsum dolor sit amet, consectetur
-                  adipisicing elit. Quo, nisi.
-                </p>
-              </div>
-              <div className="card-footer">
-                <button className="btn">
-                  <i className="bi bi-heart"></i>
-                </button>
-                <button className="btn">
-                  <i className="bi bi-chat"></i>
-                </button>
-                <button className="btn">
-                  <i className="bi bi-share"></i>
-                </button>
-                <small className="text-muted text-end"> 7.9k likes </small>
-              </div>
-            </div>
-          </div>
-          <div className="col mt-4">
-            <div className="card h-100">
-              <div className="card-footer">
-                <div className="w-25 d-flex flex-row align-items-center">
-                  <img
-                    src="https://source.unsplash.com/400x400?heroine"
-                    className="img-fluid rounded-circle w-50"
-                    alt=""
-                  />
-                  <small className="ms-2"> Name </small>
-                  <small className="ms-1 text-muted"> • </small>
-                  <small className="ms-1 text-muted"> 6h </small>
-                </div>
-              </div>
-              <img
-                src="https://source.unsplash.com/800x600?heroine"
-                className="card-img-top"
-                alt=""
-              />
-              <div className="card-body">
-                <p className="card-text">
-                  <span>
-                    <strong> Name </strong>
-                  </span>
-                  Caption of user... Lorem ipsum dolor sit amet, consectetur
-                  adipisicing elit. Quo, nisi.
-                </p>
-              </div>
-              <div className="card-footer">
-                <button className="btn">
-                  <i className="bi bi-heart"></i>
-                </button>
-                <button className="btn">
-                  <i className="bi bi-chat"></i>
-                </button>
-                <button className="btn">
-                  <i className="bi bi-share"></i>
-                </button>
-                <small className="text-muted text-end"> 11.2k likes </small>
-              </div>
-            </div>
-          </div>
+              );
+            })}
+          {/* user detail ends  */}
         </div>
       </div>
     </>

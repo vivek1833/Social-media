@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import Navbar from "./Navbar";
 
 const Explore = () => {
   const [search, setSearch] = useState("");
+  const [users, setUsers] = useState([]);
 
+  // Search user function
   const findUser = () => {
     const res = fetch(`http://localhost:8000/getuser/${search}`, {
       method: "GET",
@@ -21,9 +23,39 @@ const Explore = () => {
         setSearch({
           users: data.users,
         });
-        console.log(data);
       });
   };
+
+  // Show every post
+  const showPosts = async () => {
+    try {
+      const res = await fetch("http://localhost:8000/home", {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          token: localStorage.getItem("token"),
+        },
+        credentials: "include",
+      });
+
+      const data = await res.json();
+      setUsers({
+        userdata: data.posts,
+      });
+
+      if (res.status !== 201) {
+        const error = new Error(res.error);
+        throw error;
+      }
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
+
+  useEffect(() => {
+    showPosts();
+  }, []);
 
   return (
     <>
@@ -59,23 +91,24 @@ const Explore = () => {
         {/* show users  */}
         <div className="row row-cols-3 row-cols-md-4 g-1">
           <div className="col">
-            <div className="card h-100 w-50">
+            <div className="card">
               <div className="card-body">
                 {search.users &&
                   search.users.map((user) => {
                     return (
                       <div className="card">
-                        <div className="card-body">
-                          <img
-                            src={user.profilephoto}
-                            className="card-img-top rounded-circle"
-                            alt="card"
-                          />
-                          <p className="card-title">{user.username}</p>
+                        <div className="card-body text-center">
                           <Link
-                            to={`/${user.username}`}
-                            className="btn btn-primary">
-                            View Profile
+                            to={`/profile/${user.username}`}
+                            className="text-decoration-none text-dark"
+                            style={{ cursor: "pointer" }}>
+                            <img
+                              src={user.profilephoto}
+                              className="card-img-top rounded-circle mx-auto d-block img-fluid" 
+                              // width for small devices 100 and large devices 50 px
+                              alt="card"
+                            />
+                            <p className="card-title">{user.name}</p>
                           </Link>
                         </div>
                       </div>
@@ -88,61 +121,22 @@ const Explore = () => {
 
         {/* Content  */}
         <div className="row row-cols-3 row-cols-md-4 g-1">
-          <div className="col">
-            <div className="card h-100">
-              <Link to="https://source.unsplash.com/400x400?man">
-                <img
-                  src="https://source.unsplash.com/400x400?man"
-                  className="card-img-top"
-                  alt="card"
-                />
-              </Link>
-            </div>
-          </div>
-          <div className="col">
-            <div className="card h-100">
-              <Link to="https://source.unsplash.com/400x400?boy">
-                <img
-                  src="https://source.unsplash.com/400x400?boy"
-                  className="card-img-top"
-                  alt="card"
-                />
-              </Link>
-            </div>
-          </div>
-          <div className="col">
-            <div className="card h-100">
-              <Link to="https://source.unsplash.com/400x400?nature">
-                <img
-                  src="https://source.unsplash.com/400x400?nature"
-                  className="card-img-top"
-                  alt="card"
-                />
-              </Link>
-            </div>
-          </div>
-          <div className="col">
-            <div className="card h-100">
-              <Link to="https://source.unsplash.com/400x400?animal">
-                <img
-                  src="https://source.unsplash.com/400x400?animal"
-                  className="card-img-top"
-                  alt="card"
-                />
-              </Link>
-            </div>
-          </div>
-          <div className="col">
-            <div className="card h-100">
-              <Link to="https://source.unsplash.com/400x400?water">
-                <img
-                  src="https://source.unsplash.com/400x400?water"
-                  className="card-img-top"
-                  alt="card"
-                />
-              </Link>
-            </div>
-          </div>
+          {users.userdata &&
+            users.userdata.map((post) => {
+              return (
+                <div className="col">
+                  <div className="card h-100">
+                    <Link to={`/post/${post._id}`}>
+                      <img
+                        src={post.post}
+                        className="card-img-top"
+                        alt="card"
+                      />
+                    </Link>
+                  </div>
+                </div>
+              );
+            })}
         </div>
       </div>
     </>

@@ -39,7 +39,6 @@ const Login = () => {
     if (res.status === 400 || !data) {
       window.alert("Invalid Login");
     } else {
-      window.alert("Login Successful");
       navigate("/");
     }
   };
@@ -126,8 +125,8 @@ const Login = () => {
                     </div>
                     <button
                       type="submit"
-                      onClick={submitData}
-                      className="btn btn-primary btn-block text-uppercase mb-2 rounded-pill shadow-sm w-100">
+                      className="btn btn-primary btn-block text-uppercase mb-2 rounded-pill shadow-sm w-100"
+                      onClick={submitData}>
                       Sign in
                     </button>
 
@@ -138,26 +137,6 @@ const Login = () => {
                           <u> Sign up here </u>
                         </Link>
                       </p>
-                    </div>
-
-                    <div className="d-flex align-items-center">
-                      <hr className="w-25" /> OR <hr className="w-25" />
-                    </div>
-
-                    <div className="text-center d-flex justify-content-between mt-4">
-                      <p> Sign up using: </p>
-                      <div className="d-flex">
-                        <button
-                          type="submit"
-                          className="mx-1 btn btn-primary text-uppercase rounded-pill shadow-sm w-50 p">
-                          <i className="bi bi-google"></i> Google
-                        </button>
-                        <button
-                          type="submit"
-                          className="mx-1 btn btn-primary text-uppercase rounded-pill shadow-sm w-50">
-                          <i className="bi bi-facebook"></i> Facebook
-                        </button>
-                      </div>
                     </div>
                   </form>
                 </div>
