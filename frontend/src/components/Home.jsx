@@ -93,45 +93,47 @@ const Home = () => {
                         </div>
                       </Link>
                     </div>
-                    <Link to={`/post/${post._id}`}>
-                      <img
-                        src={post.post}
-                        className="card-img-top"
-                        alt="postpic"
-                      />
-                    </Link>
-                    <div className="card-body">
-                      <p className="card-text">
-                        <span>
-                          <strong> {post.name} </strong>
-                        </span>
-                        {post.caption}
-                      </p>
-                    </div>
-                    <div className="card-footer">
-                      <button
-                        id="like"
-                        name="like"
-                        className="btn"
-                        onClick={() => {
-                          likePost(post._id);
-                        }}>
-                        <i className="bi bi-heart"></i>
-                      </button>
-                      <small className="text-muted text-end">
-                        {post.likecount} likes
-                      </small>
+                    <div>
+                      <Link to={`/post/${post._id}`}>
+                        <img
+                          src={post.post}
+                          className="card-img-top"
+                          alt="postpic"
+                        />
+                      </Link>
+                      <div className="card-body">
+                        <p className="card-text">
+                          <span>
+                            <strong> {post.name} </strong>
+                          </span>
+                          {post.caption}
+                        </p>
+                      </div>
 
-                      <Link
-                        to={`/post/${post._id}`}
-                        className="text-decoration-none text-dark">
-                        <button className="btn">
-                          <i className="bi bi-chat"></i>
+                      <div className="card-footer">
+                        <button
+                          id="like"
+                          name="like"
+                          className="btn"
+                          onClick={() => {
+                            likePost(post._id);
+                          }}>
+                          <i className="bi bi-heart"></i>
                         </button>
                         <small className="text-muted text-end">
-                          {post.commentcount} comments
+                          {post.likecount} likes
                         </small>
-                      </Link>
+                        <Link
+                          to={`/post/${post._id}`}
+                          className="text-decoration-none text-dark">
+                          <button className="btn">
+                            <i className="bi bi-chat"></i>
+                          </button>
+                          <small className="text-muted text-end">
+                            {post.commentcount} comments
+                          </small>
+                        </Link>
+                      </div>
                     </div>
                   </div>
                 </div>

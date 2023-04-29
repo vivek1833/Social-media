@@ -59,14 +59,14 @@ const SignUp = () => {
             <div className="carousel-inner">
               <div className="carousel-item active" data-bs-interval="3000">
                 <img
-                  src="https://source.unsplash.com/1000x1200?hero"
+                  src="https://source.unsplash.com/1000x1200?computer"
                   className="d-block w-100"
                   alt="cardImage"
                 />
               </div>
               <div className="carousel-item">
                 <img
-                  src="https://source.unsplash.com/1000x1200?heroine"
+                  src="https://source.unsplash.com/1000x1200?media"
                   className="d-block w-100"
                   alt="cardImage"
                 />

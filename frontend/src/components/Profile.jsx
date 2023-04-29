@@ -119,12 +119,12 @@ const Profile = () => {
         <h3 className="mt-2 text-center"> {userdata.name} Posts </h3>
 
         {/* User posts  */}
-        <div className="row row-cols-3 row-cols-md-4 g-1 mt-md-3 mt-1">
+        <div className="row row-cols-3 g-1">
           {userpost.posts &&
             userpost.posts.map((post) => {
               return (
-                <div className="col" key={post._id}>
-                  <div className="card h-100">
+                <div className="col profilePost" key={post._id}>
+                  <div className="card">
                     <Link to={`/post/${post._id}`}>
                       <img
                         src={post.post}
@@ -137,6 +137,7 @@ const Profile = () => {
               );
             })}
         </div>
+        <hr className="mb-5"/>
       </div>
     </>
   );

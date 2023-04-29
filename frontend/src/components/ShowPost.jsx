@@ -80,68 +80,68 @@ const ShowPost = () => {
       <Navbar />
       <div className="container my-4">
         <h1>{currpost.username} Post</h1>
-        <div className="row">
-          <div className="col-6">
-            <div className="card w-50">
-              <img src={currpost.post} className="card-img-top" alt="post" />
-              <div className="card-body">
-                <p className="card-text">
-                  <strong> {currpost.name} </strong>
-                  {currpost.caption}
-                </p>
-                <p className="card-text">Likes: {currpost.likecount}</p>
-                <p className="card-text">Date: {currpost.date}</p>
-              </div>
+        <div className="row row-cols-1 row-cols-md-2 mt-md-2 mt-1">
+          <div className="col">
+            <div className="card">
+              <img
+                src={currpost.post}
+                className=" card-img-top w-100"
+                alt="post"
+              />
             </div>
           </div>
-          <div className="col-6">
+
+          <div className="col">
             <div className="card w-100">
               <div className="card-body">
+                <strong> {currpost.name} </strong>
+                <p className="card-text">{currpost.caption}</p>
+                <hr />
                 <p className="card-text">Comments: {currpost.commentcount}</p>
                 {currpost.comments &&
                   currpost.comments.map((comment) => {
                     return (
-                      <div className="card w-100" key={comment._id}>
+                      <div className=" w-100" key={comment._id}>
                         <p className="card-text">
-                          {comment.user}: {comment.comment}
+                          <strong>{comment.user} : </strong> {comment.comment}
                         </p>
                       </div>
                     );
                   })}
               </div>
             </div>
-          </div>
 
-          {/* Add comment  */}
-          <div className="col-6">
-            <div className="card w-100">
-              <div className="card-body">
-                <form method="GET">
-                  <div className="mb-3">
-                    <label htmlFor="comment" className="form-label">
-                      Add Comment
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="comment"
-                      name="comment"
-                      placeholder="Add Comment"
-                      value={comment}
-                      onChange={(e) => setComment(e.target.value)}
-                    />
-                  </div>
-                  <button
-                    type="submit"
-                    className="btn btn-primary"
-                    onClick={() => {
-                      commentPost(id, comment);
-                    }}>
-                    Submit
-                  </button>
-                </form>
-              </div>
+            <div className="card-body">
+              <p className="card-text">Likes: {currpost.likecount}</p>
+              <p className="card-text">Date: {currpost.date}</p>
             </div>
+
+            {/* Add comment  */}
+            <form method="GET">
+              <div className="row row-cols-1 my-3">
+                <div className="col-9">
+                  <input
+                    type="text"
+                    className="form-control"
+                    autoComplete="off"
+                    id="comment"
+                    name="comment"
+                    placeholder="Add a comment..."
+                    required={true}
+                    value={comment}
+                    onChange={(e) => setComment(e.target.value)}
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className="btn btn-primary col-2"
+                  onClick={() => {
+                    commentPost(id, comment);
+                  }}>
+                  Post
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       </div>

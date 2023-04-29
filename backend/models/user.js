@@ -31,12 +31,15 @@ const userSchema = new mongoose.Schema({
     },
     postcount: {
         type: Number,
+        Default: 0,
     },
     followercount: {
         type: Number,
+        Default: 0,
     },
     followingcount: {
         type: Number,
+        Default: 0,
     },
     
 });

@@ -124,7 +124,7 @@ const Explore = () => {
           {users.userdata &&
             users.userdata.map((post) => {
               return (
-                <div className="col">
+                <div className="col profilePost" key={post._id}>
                   <div className="card h-100">
                     <Link to={`/post/${post._id}`}>
                       <img

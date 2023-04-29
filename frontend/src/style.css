@@ -56,6 +56,28 @@
     background-position: center center;
 }
 
+
+/****************************************************
+PROFILE PAGE  
+****************************************************/
+
+.profilePost img {
+    height: 12rem;
+    object-fit: cover;
+    border: 1px solid grey;
+    border-radius: 0%;
+}
+
+.profilePost:hover {
+    cursor: pointer;
+}
+
+.profilePost:hover img {
+    opacity: 0.8;
+}
+
+
+
 @media(width <=991px) {
     .nav-bottom {
         position: fixed;
@@ -77,5 +99,11 @@
         flex-direction: row;
         justify-content: center;
         gap: 6vw;
+    }
+
+    /* PROFILE PAGE  */
+    .profilePost img {
+        height: 8rem;
+        width: 30.5vw;
     }
 }

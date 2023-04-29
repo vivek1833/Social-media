@@ -63,15 +63,19 @@ app.post("/post", authenticate, async (req, res) => {
         const { post, caption } = req.body;
 
         const newpost = new Post({
+            name: req.user.name,
+            username: req.user.username,
+            profilephoto: req.user.profilephoto,
             post: post,
             caption: caption,
-            like: [],
+            likes: [],
             comments: [],
             date: Date.now(),
-            username: req.user.username,
-            name: req.user.name,
-            profilephoto: req.user.profilephoto,
         });
+
+        const user = await User.findOne({ username: req.user.username });
+        user.postcount = user.postcount + 1;
+        await user.save();
 
         await newpost.save();
 
@@ -119,9 +123,6 @@ app.post("/register", async (req, res) => {
                 cpassword: cpassword,
                 profilephoto: "",
                 bio: "",
-                postcount: 0,
-                followercount: 0,
-                followingcount: 0,
                 posts: [],
             });
 
