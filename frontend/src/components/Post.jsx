@@ -22,7 +22,7 @@ const Post = () => {
 
     const { post, caption } = user;
 
-    const res = await fetch("http://localhost:8000/post", {
+    const res = await fetch("https://social-media-backend-iu1c.onrender.com/post", {
       method: "POST",
       headers: {
         Accept: "application/json",

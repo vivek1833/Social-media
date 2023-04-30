@@ -10,7 +10,7 @@ const ShowPost = () => {
 
   const callPost = async () => {
     try {
-      const res = await fetch(`http://localhost:8000/getpost/${id}`, {
+      const res = await fetch(`https://social-media-backend-iu1c.onrender.com/getpost/${id}`, {
         method: "GET",
         headers: {
           Accept: "application/json",
@@ -47,7 +47,7 @@ const ShowPost = () => {
 
   const commentPost = async (id, comment) => {
     try {
-      const res = await fetch(`http://localhost:8000/comment/${id}`, {
+      const res = await fetch(`https://social-media-backend-iu1c.onrender.com/comment/${id}`, {
         method: "PUT",
         headers: {
           Accept: "application/json",

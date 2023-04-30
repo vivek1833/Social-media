@@ -8,7 +8,7 @@ const Home = () => {
 
   const callHome = async () => {
     try {
-      const res = await fetch("http://localhost:8000/home", {
+      const res = await fetch("https://social-media-backend-iu1c.onrender.com/home", {
         method: "GET",
         headers: {
           Accept: "application/json",
@@ -36,7 +36,7 @@ const Home = () => {
 
   const likePost = async (_id) => {
     try {
-      const res = await fetch(`http://localhost:8000/like/${_id}`, {
+      const res = await fetch(`https://social-media-backend-iu1c.onrender.com/like/${_id}`, {
         method: "PUT",
         headers: {
           Accept: "application/json",

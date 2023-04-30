@@ -24,7 +24,7 @@ const SignUp = () => {
 
     const { name, username, email, password, cpassword } = user;
 
-    const res = await fetch("http://localhost:8000/register", {
+    const res = await fetch("https://social-media-backend-iu1c.onrender.com/register", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

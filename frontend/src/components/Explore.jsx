@@ -9,7 +9,7 @@ const Explore = () => {
 
   // Search user function
   const findUser = () => {
-    const res = fetch(`http://localhost:8000/getuser/${search}`, {
+    const res = fetch(`https://social-media-backend-iu1c.onrender.com/getuser/${search}`, {
       method: "GET",
       headers: {
         Accept: "application/json",
@@ -29,7 +29,7 @@ const Explore = () => {
   // Show every post
   const showPosts = async () => {
     try {
-      const res = await fetch("http://localhost:8000/home", {
+      const res = await fetch("https://social-media-backend-iu1c.onrender.com/home", {
         method: "GET",
         headers: {
           Accept: "application/json",

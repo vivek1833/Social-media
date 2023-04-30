@@ -21,7 +21,7 @@ const Login = () => {
 
     const { email, password } = user;
 
-    const res = await fetch("http://localhost:8000/login", {
+    const res = await fetch("https://social-media-backend-iu1c.onrender.com/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
