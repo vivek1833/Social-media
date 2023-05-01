@@ -47,46 +47,67 @@ const User = () => {
   return (
     <>
       <Navbar />
-      <div className="container my-4">
-        <div className="row">
-          <div className="col-12 mx-auto my-2">
-            <img
-              src={User.profilephoto}
-              className="card-img-top rounded-circle w-25"
-              alt="post"
-            />
-            <p>Username: {User.username}</p>
-            <p>Name: {User.name}</p>
-            <p>Bio: {User.bio}</p>
-            <p>Followers: {User.followercount}</p>
-            <p>Following: {User.followingcount}</p>
-            <p>Posts: {User.postcount}</p>
+      <div className="container">
+        <div className="row row-cols-1 row-cols-md-3 mt-md-3 mt-1">
+          <div className="col mt-3 ">
+            <div className="text-center h-100">
+              <img
+                src={User.profilephoto}
+                alt="profilePhoto"
+                className="rounded-circle w-50"
+              />
+            </div>
           </div>
-          <div className="col-12 mx-auto my-2">
-            <h1>Posts</h1>
-            <div className="row row-cols-3 row-cols-md-4 g-1 mt-md-3 mt-1">
-              {User.posts &&
-                User.posts.map((post) => {
-                  return (
-                    <div className="col" key={post._id}>
-                      <div className="card">
-                        <Link to={`/post/${post._id}`}>
-                          <img
-                            src={post.post}
-                            className="card-img-top"
-                            alt="post"
-                          />
-                        </Link>
-                        <div className="card-body">
-                          <p className="card-text">{post.caption}</p>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
+          <div className="col">
+            <div>
+              <div className="card-body mt-2">
+                <h4 className="card-title text-center">{User.username}</h4>
+                <div className="d-flex justify-content-between mt-3">
+                  <p>
+                    <span className="fw-bold"> {User.postcount} </span> posts
+                  </p>
+                  <p>
+                    <span className="fw-bold"> {User.followercount} </span>
+                    followers
+                  </p>
+                  <p>
+                    <span className="fw-bold"> {User.followingcount} </span>
+                    following
+                  </p>
+                </div>
+                <div className="mt-0 mt-md-3">
+                  <p className="fw-bold"> {User.name} </p>
+                  <p id="bio">
+                    <strong> {User.bio} </strong>
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
+        <hr className="mt-md-4   mt-0" />
+        <h3 className="mt-2 text-center"> {User.name} Posts </h3>
+
+        {/* User posts  */}
+        <div className="row row-cols-3 g-1">
+          {User.posts &&
+            User.posts.map((post) => {
+              return (
+                <div className="col profilePost" key={post._id}>
+                  <div className="card">
+                    <Link to={`/post/${post._id}`}>
+                      <img
+                        src={post.post}
+                        className="card-img-top"
+                        alt="post"
+                      />
+                    </Link>
+                  </div>
+                </div>
+              );
+            })}
+        </div>
+        <hr className="mb-5" />
       </div>
     </>
   );

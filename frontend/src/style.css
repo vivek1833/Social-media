@@ -56,6 +56,72 @@
     background-position: center center;
 }
 
+/****************************************************
+HOME PAGE
+****************************************************/
+.homePage p {
+    font-weight: 300;
+    font-size: 1rem;
+    margin-top: 0.5rem;
+}
+
+.homePost {
+    height: 35vh;
+    object-fit: cover;
+    border-radius: 0%;
+}
+
+.homePost:hover {
+    cursor: pointer;
+    opacity: 0.8;
+}
+
+#like {
+    color: red;
+}
+
+#like:hover {
+    cursor: pointer;
+}
+
+#comment {
+    color: blue;
+}
+
+#comment:hover {
+    cursor: pointer;
+}
+
+
+/****************************************************
+    POST PAGE
+****************************************************/
+.postForm input {
+    width: 100%;
+    height: 3rem;
+    border: 1px solid grey;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.postForm input:hover {
+    cursor: pointer;
+    color: rgb(0, 0, 255);
+    background-color: #f2f2f2;
+}
+
+.postForm button {
+    background-color: blue;
+    color: white;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.postForm button:hover {
+    cursor: pointer;
+    opacity: 0.8;
+}
+
 
 /****************************************************
 PROFILE PAGE  
@@ -77,6 +143,10 @@ PROFILE PAGE
 }
 
 
+
+/****************************************************
+    MEDIA QUERIES
+****************************************************/
 
 @media(width <=991px) {
     .nav-bottom {
@@ -100,6 +170,9 @@ PROFILE PAGE
         justify-content: center;
         gap: 6vw;
     }
+
+    /* HOME PAGE  */
+
 
     /* PROFILE PAGE  */
     .profilePost img {

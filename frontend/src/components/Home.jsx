@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+// import { format } from "date-fns";
 import Navbar from "./Navbar";
 
 const Home = () => {
@@ -7,6 +8,7 @@ const Home = () => {
   const [user, setUser] = useState([]);
 
   const callHome = async () => {
+    // console.log(format(new Date(), "yyyy/MM/dd kk:mm:ss"));
     try {
       const res = await fetch("https://social-media-backend-iu1c.onrender.com/home", {
         method: "GET",
@@ -36,7 +38,7 @@ const Home = () => {
 
   const likePost = async (_id) => {
     try {
-      const res = await fetch(`https://social-media-backend-iu1c.onrender.com/like/${_id}`, {
+      const res = await fetch(`https://social-media-backend-iu1c.onrender.com//like/${_id}`, {
         method: "PUT",
         headers: {
           Accept: "application/json",
@@ -75,29 +77,29 @@ const Home = () => {
             user.userdata.map((post) => {
               return (
                 <div className="col mt-4" key={post._id}>
-                  <div className="card h-100">
+                  <div className="card homePage h-100">
                     <div className="card-footer">
                       <Link
                         to={`/profile/${post.username}`}
                         className="text-decoration-none text-dark"
                         style={{ cursor: "pointer" }}>
-                        <div className="w-25 d-flex flex-row align-items-center">
+                        <div className="w-25 d-flex align-items-center">
                           <img
                             src={post.profilephoto}
                             className="img-fluid rounded-circle w-50"
                             alt="pic"
                           />
-                          <small className="ms-2"> {post.name} </small>
+                          <small className="ms-2 "> {post.name} </small>
                           <small className="ms-1 text-muted"> • </small>
                           <small className="ms-1 text-muted">{post.date}</small>
                         </div>
                       </Link>
                     </div>
-                    <div>
+                    <div className="homePage">
                       <Link to={`/post/${post._id}`}>
                         <img
                           src={post.post}
-                          className="card-img-top"
+                          className="homePost card-img-top"
                           alt="postpic"
                         />
                       </Link>
@@ -123,10 +125,11 @@ const Home = () => {
                         <small className="text-muted text-end">
                           {post.likecount} likes
                         </small>
+
                         <Link
                           to={`/post/${post._id}`}
                           className="text-decoration-none text-dark">
-                          <button className="btn">
+                          <button className="btn" id="comment">
                             <i className="bi bi-chat"></i>
                           </button>
                           <small className="text-muted text-end">
@@ -141,6 +144,7 @@ const Home = () => {
             })}
           {/* user detail ends  */}
         </div>
+        <hr className="mb-5" />
       </div>
     </>
   );

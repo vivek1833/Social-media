@@ -49,11 +49,11 @@ const Post = () => {
   return (
     <>
       <Navbar />
-      <div className="container">
+      <p className="text-center my-2 display-3">Post</p>
+      <div className="container postForm">
         <form method="POST">
-          <div className="form-row">
-            <div className="form-group col-md-6">
-              <label htmlFor="post">Post</label>
+          <div className="form-row my-2">
+            <div className="form-group col-md-6 d-block mx-auto">
               <input
                 type="text"
                 className="form-control"
@@ -68,9 +68,8 @@ const Post = () => {
             </div>
           </div>
 
-          <div className="form-row">
-            <div className="form-group col-md-6">
-              <label htmlFor="caption">Caption</label>
+          <div className="form-row my-2">
+            <div className="form-group col-md-6 d-block mx-auto">
               <input
                 type="text"
                 className="form-control"
@@ -87,7 +86,7 @@ const Post = () => {
 
           <button
             type="submit"
-            className="btn btn-primary"
+            className="btn btn-primary my-2 px-4 py-2 mx-auto d-block text-uppercase"
             onClick={submitData}>
             Post
           </button>

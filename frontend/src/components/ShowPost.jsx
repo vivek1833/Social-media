@@ -145,6 +145,7 @@ const ShowPost = () => {
           </div>
         </div>
       </div>
+      <hr className="mb-5" />
     </>
   );
 };

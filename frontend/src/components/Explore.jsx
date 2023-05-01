@@ -5,11 +5,12 @@ import Navbar from "./Navbar";
 
 const Explore = () => {
   const [search, setSearch] = useState("");
+  const [input, setInput] = useState("");
   const [users, setUsers] = useState([]);
 
   // Search user function
   const findUser = () => {
-    const res = fetch(`https://social-media-backend-iu1c.onrender.com/getuser/${search}`, {
+    const res = fetch(`https://social-media-backend-iu1c.onrender.com/getuser/${input}`, {
       method: "GET",
       headers: {
         Accept: "application/json",
@@ -23,6 +24,7 @@ const Explore = () => {
         setSearch({
           users: data.users,
         });
+        setInput("");
       });
   };
 
@@ -61,9 +63,9 @@ const Explore = () => {
     <>
       <Navbar />
       <div className="container my-4">
-        {/* Search Button */}
         <div className="row">
-          <div className="col-md-6 col-12 mx-auto my-2">
+          {/* Search Button */}
+          <div className="row col-md-6 col-12 mx-auto my-2">
             <div className="input-group mb-3">
               <input
                 type="text"
@@ -71,16 +73,12 @@ const Explore = () => {
                 placeholder="Search User"
                 name="search"
                 id="search"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
               />
               <button
-                className="rounded-end bg-secondary text-light btn btn-outline-secondary"
                 type="button"
-                id="btnSearch"
-                data-bs-toggle="popover"
-                data-bs-placement="bottom"
-                data-bs-content="Bottom popover"
+                className="btn btn-primary"
                 onClick={findUser}>
                 Search
               </button>
@@ -89,14 +87,14 @@ const Explore = () => {
         </div>
 
         {/* show users  */}
-        <div className="row row-cols-3 row-cols-md-4 g-1">
-          <div className="col">
-            <div className="card">
-              <div className="card-body">
-                {search.users &&
-                  search.users.map((user) => {
-                    return (
-                      <div className="card">
+        {search.users &&
+          search.users.map((user) => {
+            return (
+              <div className="row row-cols-3 row-cols-md-4 g-1">
+                <div className="col">
+                  <div className="card">
+                    <div className="card-body">
+                      <div className="card" key={user._id}>
                         <div className="card-body text-center">
                           <Link
                             to={`/profile/${user.username}`}
@@ -104,20 +102,19 @@ const Explore = () => {
                             style={{ cursor: "pointer" }}>
                             <img
                               src={user.profilephoto}
-                              className="card-img-top rounded-circle mx-auto d-block img-fluid" 
-                              // width for small devices 100 and large devices 50 px
+                              className="card-img-top rounded-circle mx-auto d-block img-fluid"
                               alt="card"
                             />
                             <p className="card-title">{user.name}</p>
                           </Link>
                         </div>
                       </div>
-                    );
-                  })}
+                    </div>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-        </div>
+            );
+          })}
 
         {/* Content  */}
         <div className="row row-cols-3 row-cols-md-4 g-1">
