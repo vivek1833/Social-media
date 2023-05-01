@@ -63,7 +63,7 @@ const Home = () => {
 
   useEffect(() => {
     callHome();
-  }, []);
+  }, [user]);
 
   return (
     <>
