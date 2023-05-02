@@ -38,7 +38,7 @@ const Home = () => {
 
   const likePost = async (_id) => {
     try {
-      const res = await fetch(`https://social-media-backend-iu1c.onrender.com//like/${_id}`, {
+      const res = await fetch(`https://social-media-backend-iu1c.onrender.com/like/${_id}`, {
         method: "PUT",
         headers: {
           Accept: "application/json",
