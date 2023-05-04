@@ -7,7 +7,7 @@ const Navbar = () => {
       <div className="container">
         <Link className="navbar-brand" to="/" id="logoname">
           <img
-            src="https://www.logodesignlove.com/wp-content/uploads/2022/01/logo-wave-symbol-01.jpg"
+            src="https://img.favpng.com/9/17/23/logo-social-media-photography-instagram-clip-art-png-favpng-SmgKKKm5CeWENGALyFZW4zzPj_t.jpg"
             alt="logo"
             className="logo"
           />

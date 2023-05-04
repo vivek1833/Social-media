@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import Navbar from "./Navbar";
+import { URL } from "../services/helper";
 
 const Explore = () => {
   const [search, setSearch] = useState("");
@@ -10,7 +11,7 @@ const Explore = () => {
 
   // Search user function
   const findUser = () => {
-    const res = fetch(`https://social-media-backend-iu1c.onrender.com/getuser/${input}`, {
+    const res = fetch(`${URL}/getuser/${input}`, {
       method: "GET",
       headers: {
         Accept: "application/json",
@@ -31,7 +32,7 @@ const Explore = () => {
   // Show every post
   const showPosts = async () => {
     try {
-      const res = await fetch("https://social-media-backend-iu1c.onrender.com/home", {
+      const res = await fetch(`${URL}/home`, {
         method: "GET",
         headers: {
           Accept: "application/json",
@@ -90,11 +91,11 @@ const Explore = () => {
         {search.users &&
           search.users.map((user) => {
             return (
-              <div className="row row-cols-3 row-cols-md-4 g-1">
+              <div className="row row-cols-3 row-cols-md-4 g-1" key={user._id}>
                 <div className="col">
                   <div className="card">
                     <div className="card-body">
-                      <div className="card" key={user._id}>
+                      <div className="card">
                         <div className="card-body text-center">
                           <Link
                             to={`/profile/${user.username}`}

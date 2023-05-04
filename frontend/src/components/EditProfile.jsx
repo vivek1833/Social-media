@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Navbar from "./Navbar";
+import { URL } from "../services/helper";
 
 const EditProfile = () => {
   const navigate = useNavigate();
@@ -15,7 +16,7 @@ const EditProfile = () => {
 
   const Profile = async () => {
     try {
-      const res = await fetch("https://social-media-backend-iu1c.onrender.com/profile", {
+      const res = await fetch(`${URL}/profile`, {
         method: "GET",
         headers: {
           Accept: "application/json",
@@ -49,7 +50,7 @@ const EditProfile = () => {
     const { name, bio, profilephoto, password, cpassword } = userData;
 
     try {
-      const res = await fetch("https://social-media-backend-iu1c.onrender.com/updateprofile", {
+      const res = await fetch(`${URL}updateprofile`, {
         method: "PUT",
         headers: {
           Accept: "application/json",

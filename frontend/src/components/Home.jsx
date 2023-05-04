@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 // import { format } from "date-fns";
 import Navbar from "./Navbar";
+import { URL } from "../services/helper";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -10,7 +11,7 @@ const Home = () => {
   const callHome = async () => {
     // console.log(format(new Date(), "yyyy/MM/dd kk:mm:ss"));
     try {
-      const res = await fetch("https://social-media-backend-iu1c.onrender.com/home", {
+      const res = await fetch(`${URL}/home`, {
         method: "GET",
         headers: {
           Accept: "application/json",
@@ -38,7 +39,7 @@ const Home = () => {
 
   const likePost = async (_id) => {
     try {
-      const res = await fetch(`https://social-media-backend-iu1c.onrender.com/like/${_id}`, {
+      const res = await fetch(`${URL}/like/${_id}`, {
         method: "PUT",
         headers: {
           Accept: "application/json",
@@ -91,7 +92,9 @@ const Home = () => {
                           />
                           <small className="ms-2 "> {post.name} </small>
                           <small className="ms-1 text-muted"> • </small>
-                          <small className="ms-1 text-muted">{post.date}</small>
+                          <small className="ms-1 text-muted">
+                            {post.date.substring(0, 10)}
+                          </small>
                         </div>
                       </Link>
                     </div>
@@ -104,12 +107,26 @@ const Home = () => {
                         />
                       </Link>
                       <div className="card-body">
-                        <p className="card-text">
+                        <div className="card-text">
                           <span>
                             <strong> {post.name} </strong>
                           </span>
-                          {post.caption}
-                        </p>
+                          {post.caption.substring(0, 25)}
+                          {post.caption.length > 25 && (
+                            <span>
+                              <Link to={`/post/${post._id}`}>
+                                <strong>
+                                  <button
+                                    type="button"
+                                    className="btn btn-link btn-sm text-decoration-none text-dark p-0 cursor-pointer ms-1"
+                                    title="Show more">
+                                    ...
+                                  </button>
+                                </strong>
+                              </Link>
+                            </span>
+                          )}
+                        </div>
                       </div>
 
                       <div className="card-footer">

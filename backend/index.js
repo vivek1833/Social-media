@@ -15,7 +15,7 @@ const port = process.env.PORT || 8000;
 
 app.use(express.json())
 app.use(cookieParser())
-mongoose.set('strictQuery', false); // to not show warning
+mongoose.set('strictQuery', false); // not show warning
 
 mongoose.connect(conn, {
     useNewUrlParser: true,
@@ -48,7 +48,7 @@ app.get("/profile", authenticate, async (req, res) => {
         const userpost = await Post.find({ username: req.user.username });
 
         if (userdetail) {
-            res.status(201).json({ userdetail: userdetail, userpost: userpost });
+            res.status(201).json({ userdetail: userdetail, userpost: userpost.reverse() });
         } else {
             res.status(201).json({ userdetail: null, userpost: null });
         }
@@ -76,7 +76,6 @@ app.post("/post", authenticate, async (req, res) => {
         const user = await User.findOne({ username: req.user.username });
         user.postcount = user.postcount + 1;
         await user.save();
-
         await newpost.save();
 
         res.status(201).json({ message: "Post added" });
@@ -123,13 +122,12 @@ app.post("/register", async (req, res) => {
                 cpassword: cpassword,
                 profilephoto: "",
                 bio: "",
-                posts: [],
+                postcount: 0,
+                followercount: 0,
+                followingcount: 0,
             });
 
-            // jwt token
             const token = jwt.sign({ _id: req.body._id }, process.env.SecretKey);
-
-            // add token to database
             await user.save();
 
             res.status(201).json({
@@ -185,7 +183,7 @@ app.get("/profile/:username", authenticate, async (req, res) => {
         const userpost = await Post.find({ username: req.params.username });
 
         if (user) {
-            res.status(201).json({ user: user, userpost: userpost });
+            res.status(201).json({ user: user, userpost: userpost.reverse() });
         } else {
             res.status(201).json({ user: null, userpost: null });
         }

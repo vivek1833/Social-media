@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Navbar from "./Navbar";
+import { URL } from "../services/helper";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -9,7 +10,7 @@ const Profile = () => {
 
   const callProfile = async () => {
     try {
-      const res = await fetch("https://social-media-backend-iu1c.onrender.com/profile", {
+      const res = await fetch(`${URL}/profile`, {
         method: "GET",
         headers: {
           Accept: "application/json",

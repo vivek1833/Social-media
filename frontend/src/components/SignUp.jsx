@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { URL } from "../services/helper";
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -24,7 +25,7 @@ const SignUp = () => {
 
     const { name, username, email, password, cpassword } = user;
 
-    const res = await fetch("https://social-media-backend-iu1c.onrender.com/register", {
+    const res = await fetch(`${URL}/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -41,9 +42,9 @@ const SignUp = () => {
     const data = await res.json();
 
     if (res.status === 400 || !data) {
-      window.alert("Invalid Registration");
+      window.alert(data.error);
     } else {
-      window.alert("Registration Successful");
+      window.alert("Registration Successfull");
       navigate("/login");
     }
   };

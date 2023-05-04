@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Navbar from "./Navbar";
+import { URL } from "../services/helper";
 
 const ShowPost = () => {
   const { id } = useParams();
@@ -10,7 +11,7 @@ const ShowPost = () => {
 
   const callPost = async () => {
     try {
-      const res = await fetch(`https://social-media-backend-iu1c.onrender.com/getpost/${id}`, {
+      const res = await fetch(`${URL}/getpost/${id}`, {
         method: "GET",
         headers: {
           Accept: "application/json",
@@ -47,7 +48,7 @@ const ShowPost = () => {
 
   const commentPost = async (id, comment) => {
     try {
-      const res = await fetch(`https://social-media-backend-iu1c.onrender.com/comment/${id}`, {
+      const res = await fetch(`${URL}/comment/${id}`, {
         method: "PUT",
         headers: {
           Accept: "application/json",

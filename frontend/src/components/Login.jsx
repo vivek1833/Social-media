@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { URL } from "../services/helper";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -21,7 +22,7 @@ const Login = () => {
 
     const { email, password } = user;
 
-    const res = await fetch("https://social-media-backend-iu1c.onrender.com/login", {
+    const res = await fetch(`${URL}/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -33,11 +34,10 @@ const Login = () => {
     });
 
     const data = await res.json();
-
     localStorage.setItem("token", data.token);
 
     if (res.status === 400 || !data) {
-      window.alert("Invalid Login");
+      window.alert(data.error);
     } else {
       navigate("/");
     }
