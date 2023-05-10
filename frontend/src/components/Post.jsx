@@ -11,36 +11,26 @@ const Post = () => {
     caption: "",
   });
 
-  const userInput = (e) => {
-    const name = e.target.name;
-    const value = e.target.value;
-
-    setUser({ ...user, [name]: value });
-  };
-
   const submitData = async (e) => {
     e.preventDefault();
 
-    const { post, caption } = user;
+    const formdata = new FormData();
+    formdata.append("post", user.post);
+    formdata.append("caption", user.caption);
 
     const res = await fetch(`${URL}/post`, {
       method: "POST",
       headers: {
         Accept: "application/json",
-        "Content-Type": "application/json",
-        token: localStorage.getItem("token"),
       },
-      credentials: "include",
-      body: JSON.stringify({
-        post,
-        caption,
-      }),
+      body: formdata,
     });
 
     const data = await res.json();
 
+
     if (res.status === 400 || !data) {
-      window.alert("Invalid Post");
+      window.alert(data.message );
     } else {
       window.alert(data.message);
       navigate("/");
@@ -56,15 +46,16 @@ const Post = () => {
           <div className="form-row my-2">
             <div className="form-group col-md-6 d-block mx-auto">
               <input
-                type="text"
-                className="form-control"
-                id="post"
-                name="post"
-                placeholder="Enter your post link here"
+                type="file"
+                className="form-control form-control-lg"
+                id="file"
+                name="file"
+                placeholder="Upload your post here"
                 autoComplete="off"
                 required={true}
-                value={user.post}
-                onChange={userInput}
+                onChange={(e) => {
+                  setUser({ ...user, post: e.target.files[0] });
+                }}
               />
             </div>
           </div>
@@ -73,18 +64,19 @@ const Post = () => {
             <div className="form-group col-md-6 d-block mx-auto">
               <input
                 type="text"
-                className="form-control"
+                className="form-control form-control-lg"
                 id="caption"
                 name="caption"
                 placeholder="Enter your caption here"
                 autoComplete="off"
                 required={true}
                 value={user.caption}
-                onChange={userInput}
+                onChange={(e) => {
+                  setUser({ ...user, caption: e.target.value });
+                }}
               />
             </div>
           </div>
-
           <button
             type="submit"
             className="btn btn-primary my-2 px-4 py-2 mx-auto d-block text-uppercase"

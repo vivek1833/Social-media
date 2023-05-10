@@ -5,6 +5,7 @@ const bcrypt = require('bcryptjs');
 const cors = require('cors');
 const dotenv = require('dotenv').config();
 const cookieParser = require('cookie-parser');
+const multer = require('multer');
 const authenticate = require('./middleware/auth.js');
 const User = require('./models/user.js');
 const Post = require('./models/post.js');
@@ -12,9 +13,19 @@ const Post = require('./models/post.js');
 const app = express();
 const conn = process.env.DataBase;
 const port = process.env.PORT || 8000;
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, './uploads');
+    },
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + file.originalname);
+    }
+});
+const upload = multer({ storage: storage });
 
 app.use(express.json())
 app.use(cookieParser())
+app.use('/uploads', express.static('uploads'));
 mongoose.set('strictQuery', false); // not show warning
 
 mongoose.connect(conn, {
@@ -58,9 +69,12 @@ app.get("/profile", authenticate, async (req, res) => {
 });
 
 // Post user post 
-app.post("/post", authenticate, async (req, res) => {
+app.post("/post", upload.single('post'), async (req, res) => {
     try {
-        const { post, caption } = req.body;
+        const post = req.file.path;
+        const caption = req.body.caption;
+
+        console.log(post);
 
         const newpost = new Post({
             name: req.user.name,
@@ -82,7 +96,7 @@ app.post("/post", authenticate, async (req, res) => {
     }
     catch (error) {
         console.log(error.message);
-        res.status(400).json({ message: error.mesa });
+        res.status(400).json({ message: error.message });
     }
 });
 
@@ -203,12 +217,14 @@ app.put("/like/:id", authenticate, async (req, res) => {
         if (!hasLiked) {
             await post.updateOne({ $push: { likes: { user: req.user.username } } });
             post.likecount = post.likecount + 1;
+            message = "liked";
         } else {
             await post.updateOne({ $pull: { likes: { user: req.user.username } } });
             post.likecount = post.likecount - 1;
+            message = "unliked";
         }
         post.save();
-        res.status(201).json({ posts: posts });
+        res.status(201).json({ posts: posts, message: message });
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: 'Server error' });

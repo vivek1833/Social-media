@@ -84,10 +84,10 @@ const Home = () => {
                         to={`/profile/${post.username}`}
                         className="text-decoration-none text-dark"
                         style={{ cursor: "pointer" }}>
-                        <div className="w-25 d-flex align-items-center">
+                        <div className="w-100 d-flex align-items-center">
                           <img
                             src={post.profilephoto}
-                            className="img-fluid rounded-circle w-50"
+                            className="profilephoto img-fluid rounded-circle"
                             alt="pic"
                           />
                           <small className="ms-2 "> {post.name} </small>
@@ -111,8 +111,8 @@ const Home = () => {
                           <span>
                             <strong> {post.name} </strong>
                           </span>
-                          {post.caption.substring(0, 25)}
-                          {post.caption.length > 25 && (
+                          {post.caption.substring(0, 22)}
+                          {post.caption.length > 22 && (
                             <span>
                               <Link to={`/post/${post._id}`}>
                                 <strong>
@@ -131,16 +131,13 @@ const Home = () => {
 
                       <div className="card-footer">
                         <button
-                          id="like"
-                          name="like"
                           className="btn"
-                          onClick={() => {
-                            likePost(post._id);
-                          }}>
+                          id="like"
+                          onClick={() => likePost(post._id)}>
                           <i className="bi bi-heart"></i>
                         </button>
                         <small className="text-muted text-end">
-                          {post.likecount} likes
+                          {post.likes.length} likes
                         </small>
 
                         <Link
