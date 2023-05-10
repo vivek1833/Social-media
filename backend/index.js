@@ -5,27 +5,16 @@ const bcrypt = require('bcryptjs');
 const cors = require('cors');
 const dotenv = require('dotenv').config();
 const cookieParser = require('cookie-parser');
-const multer = require('multer');
 const authenticate = require('./middleware/auth.js');
 const User = require('./models/user.js');
 const Post = require('./models/post.js');
 
 const app = express();
 const conn = process.env.DataBase;
-const port = process.env.PORT || 8000;
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, './uploads');
-    },
-    filename: (req, file, cb) => {
-        cb(null, Date.now() + file.originalname);
-    }
-});
-const upload = multer({ storage: storage });
+const port = 8000;
 
 app.use(express.json())
 app.use(cookieParser())
-app.use('/uploads', express.static('uploads'));
 mongoose.set('strictQuery', false); // not show warning
 
 mongoose.connect(conn, {
@@ -69,12 +58,9 @@ app.get("/profile", authenticate, async (req, res) => {
 });
 
 // Post user post 
-app.post("/post", upload.single('post'), async (req, res) => {
+app.post("/post", authenticate, async (req, res) => {
     try {
-        const post = req.file.path;
-        const caption = req.body.caption;
-
-        console.log(post);
+        const { post, caption } = req.body;
 
         const newpost = new Post({
             name: req.user.name,

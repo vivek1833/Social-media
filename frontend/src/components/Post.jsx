@@ -11,26 +11,47 @@ const Post = () => {
     caption: "",
   });
 
+  const handleFile = async (e) => {
+    const file = e.target.files[0];
+    const base64 = await convertToBase64(file);
+    setUser({ ...user, post: base64 });
+  };
+
+  const convertToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const fileReader = new FileReader();
+      fileReader.readAsDataURL(file);
+
+      fileReader.onload = () => {
+        resolve(fileReader.result);
+      };
+
+      fileReader.onerror = (err) => {
+        reject(err);
+      };
+    });
+  };
+
   const submitData = async (e) => {
     e.preventDefault();
-
-    const formdata = new FormData();
-    formdata.append("post", user.post);
-    formdata.append("caption", user.caption);
+    const { post, caption } = user;
 
     const res = await fetch(`${URL}/post`, {
       method: "POST",
       headers: {
-        Accept: "application/json",
+        "Content-Type": "application/json",
+        token: localStorage.getItem("token"),
       },
-      body: formdata,
+      body: JSON.stringify({
+        post,
+        caption,
+      }),
     });
 
     const data = await res.json();
 
-
     if (res.status === 400 || !data) {
-      window.alert(data.message );
+      window.alert(data.message);
     } else {
       window.alert(data.message);
       navigate("/");
@@ -54,7 +75,7 @@ const Post = () => {
                 autoComplete="off"
                 required={true}
                 onChange={(e) => {
-                  setUser({ ...user, post: e.target.files[0] });
+                  handleFile(e);
                 }}
               />
             </div>
