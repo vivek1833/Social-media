@@ -3,43 +3,53 @@ import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const [isActive, setisActive] = useState({
-    home: true,
+    home: false,
     explore: false,
     post: false,
     profile: false,
   });
 
-  // useEffect(() => {
-  //   if (window.location.pathname === "/") {
-  //     setisActive({
-  //       home: true,
-  //       explore: false,
-  //       post: false,
-  //       profile: false,
-  //     });
-  //   } else if (window.location.pathname === "/explore") {
-  //     setisActive({
-  //       home: false,
-  //       explore: true,
-  //       post: false,
-  //       profile: false,
-  //     });
-  //   } else if (window.location.pathname === "/post") {
-  //     setisActive({
-  //       home: false,
-  //       explore: false,
-  //       post: true,
-  //       profile: false,
-  //     });
-  //   } else if (window.location.pathname === "/profile") {
-  //     setisActive({
-  //       home: false,
-  //       explore: false,
-  //       post: false,
-  //       profile: true,
-  //     });
-  //   }
-  // });
+  const currenPath = async () => {
+    const path = window.location.pathname;
+    switch (path) {
+      case "/":
+        setisActive({
+          home: true,
+          explore: false,
+          post: false,
+          profile: false,
+        });
+        break;
+      case "/explore":
+        setisActive({
+          home: false,
+          explore: true,
+          post: false,
+          profile: false,
+        });
+        break;
+      case "/post":
+        setisActive({
+          home: false,
+          explore: false,
+          post: true,
+          profile: false,
+        });
+        break;
+      case "/profile":
+        setisActive({
+          home: false,
+          explore: false,
+          post: false,
+          profile: true,
+        });
+        break;
+    }
+  };
+
+  useEffect(() => {
+    currenPath();
+  }, []);
 
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -54,7 +64,7 @@ const Navbar = () => {
         </Link>
         <div className="nav-bottom">
           <ul className="navbar-nav">
-            <li className="nav-item">
+            <li className="nav-item" onClick={currenPath}>
               {isActive.home ? (
                 <Link className="nav-link active" to="/">
                   <i className="bi bi-house-fill"></i> Home
@@ -66,7 +76,7 @@ const Navbar = () => {
               )}
             </li>
 
-            <li className="nav-item">
+            <li className="nav-item" onClick={currenPath}>
               {isActive.explore ? (
                 <Link className="nav-link active" to="/explore">
                   <i className="bi bi-compass-fill"></i> Explore
@@ -78,7 +88,7 @@ const Navbar = () => {
               )}
             </li>
 
-            <li className="nav-item">
+            <li className="nav-item" onClick={currenPath}>
               {isActive.post ? (
                 <Link className="nav-link active" to="/post">
                   <i className="bi bi-plus-square-fill"></i> Post
@@ -90,7 +100,7 @@ const Navbar = () => {
               )}
             </li>
 
-            <li className="nav-item">
+            <li className="nav-item" onClick={currenPath}>
               {isActive.profile ? (
                 <Link className="nav-link active" to="/profile">
                   <i className="bi bi-person-fill"></i> Profile
