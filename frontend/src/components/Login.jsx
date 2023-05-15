@@ -35,7 +35,6 @@ const Login = () => {
 
     const data = await res.json();
     localStorage.setItem("token", data.token);
-    localStorage.setItem("id", data.user._id);
 
     if (res.status === 400 || !data) {
       window.alert(data.error);

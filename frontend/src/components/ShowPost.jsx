@@ -61,11 +61,9 @@ const ShowPost = () => {
         credentials: "include",
       });
 
-      const data = await res.json();
-
       if (res.status === 201) {
-        window.alert(data.message);
-        navigate("/");
+        window.location.reload();
+        navigate(`/post/${id}`);
       }
     } catch (err) {
       console.log(err.message);

@@ -25,6 +25,7 @@ const Home = () => {
 
       setUser({
         userdata: data.posts,
+        user: data.user,
       });
 
       if (res.status !== 201) {
@@ -133,13 +134,15 @@ const Home = () => {
                         <button
                           className="btn"
                           id="like"
-                          onClick={() => likePost(post._id)}>
+                          onClick={() => {
+                            likePost(post._id);
+                          }}>
                           <i className="bi bi-heart"></i>
                         </button>
+
                         <small className="text-muted text-end">
                           {post.likes.length} likes
                         </small>
-
                         <Link
                           to={`/post/${post._id}`}
                           className="text-decoration-none text-dark">

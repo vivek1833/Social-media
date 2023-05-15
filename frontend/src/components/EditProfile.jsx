@@ -50,7 +50,7 @@ const EditProfile = () => {
     const { name, bio, profilephoto, password, cpassword } = userData;
 
     try {
-      const res = await fetch(`${URL}updateprofile`, {
+      const res = await fetch(`${URL}/updateprofile`, {
         method: "PUT",
         headers: {
           Accept: "application/json",

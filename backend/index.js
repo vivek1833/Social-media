@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const cors = require('cors');
-const dotenv = require('dotenv').config();
+const env = require('dotenv').config();
 const cookieParser = require('cookie-parser');
 const authenticate = require('./middleware/auth.js');
 const User = require('./models/user.js');
@@ -13,8 +13,9 @@ const app = express();
 const conn = process.env.DataBase;
 const port = 8000;
 
-app.use(express.json())
-app.use(cookieParser())
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
+app.use(cookieParser());
 mongoose.set('strictQuery', false); // not show warning
 
 mongoose.connect(conn, {
@@ -34,7 +35,7 @@ app.get("/home", authenticate, async (req, res) => {
     try {
         const posts = await Post.find({});
         posts.reverse();
-        res.status(201).json({ posts: posts });
+        res.status(201).json({ posts: posts, user: req.user });
 
     } catch (error) {
         console.log(error.message);
