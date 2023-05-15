@@ -11,7 +11,7 @@ const Post = require('./models/post.js');
 
 const app = express();
 const conn = process.env.DataBase;
-const port = 8000;
+const port = 8000 || process.env.PORT;
 
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
@@ -25,9 +25,8 @@ mongoose.connect(conn, {
     console.log("Database Connected");
 }).catch((err) => console.log(err.message));
 
-// accept from everywhere
 app.use(cors({
-    origin: "*",
+    origin: process.env.FrontEnd,
     methods: ['GET', 'POST', 'PATCH', 'DELETE', 'PUT'],
     credentials: true
 }));
