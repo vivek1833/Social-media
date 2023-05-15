@@ -26,8 +26,8 @@ mongoose.connect(conn, {
 }).catch((err) => console.log(err.message));
 
 app.use(cors({
-    origin: process.env.FrontEnd,
-    credentials: true,
+    origin: "*",
+    credentials: true
 }))
 
 // home page, get every user posts
