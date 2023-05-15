@@ -25,10 +25,12 @@ mongoose.connect(conn, {
     console.log("Database Connected");
 }).catch((err) => console.log(err.message));
 
+// accept from everywhere
 app.use(cors({
     origin: "*",
+    methods: ['GET', 'POST', 'PATCH', 'DELETE', 'PUT'],
     credentials: true
-}))
+}));
 
 // home page, get every user posts
 app.get("/home", authenticate, async (req, res) => {
