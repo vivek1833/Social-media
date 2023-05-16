@@ -48,7 +48,8 @@ mongoose.connect(conn, {
 app.use(cors({
     origin: process.env.FrontEnd,
     methods: ['GET', 'POST', 'PATCH', 'DELETE', 'PUT'],
-    credentials: true
+    credentials: true,
+    accessControlAllowOrigin: "*",
 }));
 
 // home page, get every user posts
