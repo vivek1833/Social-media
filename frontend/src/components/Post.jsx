@@ -11,41 +11,19 @@ const Post = () => {
     caption: "",
   });
 
-  const handleFile = async (e) => {
-    const file = e.target.files[0];
-    const base64 = await convertToBase64(file);
-    setUser({ ...user, post: base64 });
-  };
-
-  const convertToBase64 = (file) => {
-    return new Promise((resolve, reject) => {
-      const fileReader = new FileReader();
-      fileReader.readAsDataURL(file);
-
-      fileReader.onload = () => {
-        resolve(fileReader.result);
-      };
-
-      fileReader.onerror = (err) => {
-        reject(err);
-      };
-    });
-  };
-
   const submitData = async (e) => {
     e.preventDefault();
-    const { post, caption } = user;
 
+    const formData = new FormData();
+    formData.append("file", user.post);
+    formData.append("caption", user.caption);
+    
     const res = await fetch(`${URL}/post`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
         token: localStorage.getItem("token"),
       },
-      body: JSON.stringify({
-        post,
-        caption,
-      }),
+      body: formData,
     });
 
     const data = await res.json();
@@ -75,7 +53,7 @@ const Post = () => {
                 autoComplete="off"
                 required={true}
                 onChange={(e) => {
-                  handleFile(e);
+                  setUser({ ...user, post: e.target.files[0] });
                 }}
               />
             </div>

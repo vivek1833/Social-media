@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const cors = require('cors');
+const cloudinary = require('cloudinary');
+const multer = require('multer');
 const env = require('dotenv').config();
 const cookieParser = require('cookie-parser');
 const authenticate = require('./middleware/auth.js');
@@ -12,6 +14,24 @@ const Post = require('./models/post.js');
 const app = express();
 const conn = process.env.DataBase;
 const port = 8000 || process.env.PORT;
+
+cloudinary.config({
+    cloud_name: process.env.CloudName,
+    api_key: process.env.CloudKey,
+    api_secret: process.env.CloudSecret
+});
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, './uploads/');
+    },
+
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + "_" + file.originalname);
+    }
+});
+
+const upload = multer({ storage: storage }).single('file');
 
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
@@ -43,7 +63,7 @@ app.get("/home", authenticate, async (req, res) => {
     }
 });
 
-// ProfilePage
+// Profile Page
 app.get("/profile", authenticate, async (req, res) => {
     try {
         const userdetail = await User.findOne({ username: req.user.username });
@@ -59,20 +79,20 @@ app.get("/profile", authenticate, async (req, res) => {
     }
 });
 
-// Post user post 
-app.post("/post", authenticate, async (req, res) => {
+// Post user post using multer
+app.post("/post", authenticate, upload, async (req, res) => {
     try {
-        const { post, caption } = req.body;
+        const { caption } = req.body;
+        const uploadimg = await cloudinary.uploader.upload(req.file.path);
 
         const newpost = new Post({
-            name: req.user.name,
             username: req.user.username,
+            name: req.user.name,
             profilephoto: req.user.profilephoto,
-            post: post,
+            post: uploadimg.secure_url,
             caption: caption,
             likes: [],
             comments: [],
-            date: Date.now(),
         });
 
         const user = await User.findOne({ username: req.user.username });
