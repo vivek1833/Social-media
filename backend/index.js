@@ -22,10 +22,6 @@ cloudinary.config({
 });
 
 const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, './uploads/');
-    },
-
     filename: (req, file, cb) => {
         cb(null, Date.now() + "_" + file.originalname);
     }
@@ -46,7 +42,7 @@ mongoose.connect(conn, {
 }).catch((err) => console.log(err.message));
 
 app.use(cors({
-    origin: "*",
+    origin: process.env.FrontEnd,
     methods: ['GET', 'POST', 'PATCH', 'DELETE', 'PUT'],
     credentials: true,
 }));
