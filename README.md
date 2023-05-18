@@ -9,7 +9,7 @@ This project is deployed on [Photgram-friends](https://photogram-friends.netlify
 - [Backend](#backend)
 - [ENV file](#env-file)
 - [About Project](#about-project)
-- [Screenshots](#websit-screenshots)
+- [Screenshots](#website-screenshots)
 
 ## Folder Structure
 
