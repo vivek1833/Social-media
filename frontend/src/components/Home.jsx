@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-// import { format } from "date-fns";
 import Navbar from "./Navbar";
 import { URL } from "../services/helper";
 
@@ -9,7 +8,10 @@ const Home = () => {
   const [user, setUser] = useState([]);
 
   const callHome = async () => {
-    // console.log(format(new Date(), "yyyy/MM/dd kk:mm:ss"));
+    if (!localStorage.getItem("token")) {
+      navigate("/login");
+    }
+    
     try {
       const res = await fetch(`${URL}/home`, {
         method: "GET",
