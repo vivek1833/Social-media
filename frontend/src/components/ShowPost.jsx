@@ -8,8 +8,10 @@ const ShowPost = () => {
   const navigate = useNavigate();
   const [currpost, setPost] = useState("");
   const [comment, setComment] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const callPost = async () => {
+    setLoading(true);
     try {
       const res = await fetch(`${URL}/getpost/${id}`, {
         method: "GET",
@@ -36,8 +38,11 @@ const ShowPost = () => {
         date: data.userpost.date,
       });
 
+      setLoading(false);
+
       if (res.status !== 201) {
         const error = new Error(res.error);
+        setLoading(false);
         throw error;
       }
     } catch (error) {
@@ -77,73 +82,89 @@ const ShowPost = () => {
   return (
     <>
       <Navbar />
-      <div className="container my-4">
-        <h1>{currpost.username} Post</h1>
-        <div className="row row-cols-1 row-cols-md-2 mt-md-2 mt-1">
-          <div className="col">
-            <div className="card">
-              <img
-                src={currpost.post}
-                className=" card-img-top w-100"
-                alt="post"
-              />
-            </div>
-          </div>
-
-          <div className="col">
-            <div className="card w-100">
-              <div className="card-body">
-                <strong> {currpost.name} </strong>
-                <p className="card-text">{currpost.caption}</p>
-                <hr />
-                <p className="card-text">Comments: {currpost.commentcount}</p>
-                {currpost.comments &&
-                  currpost.comments.map((comment) => {
-                    return (
-                      <div className=" w-100" key={comment._id}>
-                        <p className="card-text">
-                          <strong>{comment.user} : </strong> {comment.comment}
-                        </p>
-                      </div>
-                    );
-                  })}
+      {loading ? (
+        <div className="container text-center mt-5">
+          <div className="spinner-border text-primary" role="status"></div>
+        </div>
+      ) : (
+        <div className="container my-4">
+          <h1>{currpost.username} Post</h1>
+          <div className="row row-cols-1 row-cols-md-2 mt-md-2 mt-1">
+            <div className="col">
+              <div className="card">
+                <img
+                  src={currpost.post}
+                  className=" card-img-top w-100"
+                  alt="post"
+                />
               </div>
             </div>
 
-            <div className="card-body">
-              <p className="card-text">Likes: {currpost.likecount}</p>
-              <p className="card-text">Date: {currpost.date}</p>
-            </div>
-
-            {/* Add comment  */}
-            <form method="GET">
-              <div className="row row-cols-1 my-3">
-                <div className="col-9">
-                  <input
-                    type="text"
-                    className="form-control"
-                    autoComplete="off"
-                    id="comment"
-                    name="comment"
-                    placeholder="Add a comment..."
-                    required={true}
-                    value={comment}
-                    onChange={(e) => setComment(e.target.value)}
-                  />
+            <div className="col">
+              <div className="card w-100">
+                <div className="card-body">
+                  <strong> {currpost.name} </strong>
+                  <p className="card-text">{currpost.caption}</p>
+                  <hr />
+                  <p className="card-text">Comments: {currpost.commentcount}</p>
+                  {currpost.comments &&
+                    currpost.comments.map((comment) => {
+                      return (
+                        <div className=" w-100" key={comment._id}>
+                          <p className="card-text">
+                            <strong>{comment.user} : </strong> {comment.comment}
+                          </p>
+                        </div>
+                      );
+                    })}
                 </div>
-                <button
-                  type="submit"
-                  className="btn btn-primary col-2"
-                  onClick={() => {
-                    commentPost(id, comment);
-                  }}>
-                  Post
-                </button>
               </div>
-            </form>
+
+              <div className="card-body">
+                <p className="card-text">Likes: {currpost.likecount}</p>
+                <>
+                  Date :{" "}
+                  {new Date(currpost.date).toLocaleDateString("en-US", {
+                    hour: "numeric",
+                    minute: "numeric",
+                    weekday: "long",
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric",
+                  })}
+                </>
+              </div>
+
+              {/* Add comment  */}
+              <form method="GET">
+                <div className="row row-cols-1 my-3">
+                  <div className="col-9">
+                    <input
+                      type="text"
+                      className="form-control"
+                      autoComplete="off"
+                      id="comment"
+                      name="comment"
+                      placeholder="Add a comment..."
+                      required={true}
+                      value={comment}
+                      onChange={(e) => setComment(e.target.value)}
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    className="btn btn-primary col-2"
+                    onClick={() => {
+                      commentPost(id, comment);
+                    }}>
+                    Post
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
-      </div>
+      )}
       <hr className="mb-5" />
     </>
   );

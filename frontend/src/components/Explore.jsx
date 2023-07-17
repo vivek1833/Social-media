@@ -8,6 +8,7 @@ const Explore = () => {
   const [search, setSearch] = useState("");
   const [input, setInput] = useState("");
   const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   // Search user function
   const findUser = () => {
@@ -31,6 +32,7 @@ const Explore = () => {
 
   // Show every post
   const showPosts = async () => {
+    setLoading(true);
     try {
       const res = await fetch(`${URL}/home`, {
         method: "GET",
@@ -46,13 +48,16 @@ const Explore = () => {
       setUsers({
         userdata: data.posts,
       });
+      setLoading(false);
 
       if (res.status !== 201) {
         const error = new Error(res.error);
         throw error;
+        setLoading(false);
       }
     } catch (err) {
       console.log(err.message);
+      setLoading(false);
     }
   };
 
@@ -118,24 +123,32 @@ const Explore = () => {
           })}
 
         {/* Content  */}
-        <div className="row row-cols-3 row-cols-md-4 g-1">
-          {users.userdata &&
-            users.userdata.map((post) => {
-              return (
-                <div className="col profilePost" key={post._id}>
-                  <div className="card h-100">
-                    <Link to={`/post/${post._id}`}>
-                      <img
-                        src={post.post}
-                        className="card-img-top"
-                        alt="card"
-                      />
-                    </Link>
+        {loading ? (
+          <div className="text-center">
+            <div className="spinner-border text-primary" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>
+          </div>
+        ) : (
+          <div className="row row-cols-3 row-cols-md-4 g-1">
+            {users.userdata &&
+              users.userdata.map((post) => {
+                return (
+                  <div className="col profilePost" key={post._id}>
+                    <div className="card h-100">
+                      <Link to={`/post/${post._id}`}>
+                        <img
+                          src={post.post}
+                          className="card-img-top"
+                          alt="card"
+                        />
+                      </Link>
+                    </div>
                   </div>
-                </div>
-              );
-            })}
-        </div>
+                );
+              })}
+          </div>
+        )}
       </div>
     </>
   );

@@ -5,6 +5,7 @@ import { URL } from "../services/helper";
 
 const Post = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const [user, setUser] = useState({
     post: "",
@@ -13,11 +14,12 @@ const Post = () => {
 
   const submitData = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     const formData = new FormData();
     formData.append("file", user.post);
     formData.append("caption", user.caption);
-    
+
     const res = await fetch(`${URL}/post`, {
       method: "POST",
       headers: {
@@ -27,11 +29,12 @@ const Post = () => {
     });
 
     const data = await res.json();
+    setLoading(false);
 
     if (res.status === 400 || !data) {
       window.alert(data.message);
+      setLoading(false);
     } else {
-      window.alert(data.message);
       navigate("/");
     }
   };
@@ -76,12 +79,20 @@ const Post = () => {
               />
             </div>
           </div>
-          <button
-            type="submit"
-            className="btn btn-primary my-2 px-4 py-2 mx-auto d-block text-uppercase"
-            onClick={submitData}>
-            Post
-          </button>
+          {loading ? (
+            <div className="d-flex justify-content-center">
+              <div className="spinner-border text-primary" role="status">
+                <span className="sr-only"></span>
+              </div>
+            </div>
+          ) : (
+            <button
+              type="submit"
+              className="btn btn-primary my-2 px-4 py-2 mx-auto d-block text-uppercase"
+              onClick={submitData}>
+              Post
+            </button>
+          )}
         </form>
       </div>
     </>
