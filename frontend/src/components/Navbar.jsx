@@ -62,6 +62,16 @@ const Navbar = () => {
           />
           Photogram
         </Link>
+
+        <button className="navbar-toggler border-0">
+          <Link
+            to="https://chatbook-f57ae.web.app/"
+            target="_blank"
+            className="btn btn-outine-none">
+            <h5 className="bi bi-chat-dots-fill"></h5>
+          </Link>
+        </button>
+
         <div className="nav-bottom">
           <ul className="navbar-nav">
             <li className="nav-item" onClick={currenPath}>
@@ -110,6 +120,15 @@ const Navbar = () => {
                   <i className="bi bi-person"></i> Profile
                 </Link>
               )}
+            </li>
+
+            <li className="nav-item d-none d-xl-block d-xxl-none">
+              <Link
+                to="https://chatbook-f57ae.web.app/"
+                target="_blank"
+                className="nav-link">
+                <i className="bi bi-chat-dots"></i> Chat
+              </Link>
             </li>
           </ul>
         </div>
