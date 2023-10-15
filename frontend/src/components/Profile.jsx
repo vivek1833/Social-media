@@ -120,7 +120,7 @@ const Profile = () => {
                     <button
                       className="btn btn-danger"
                       onClick={() => {
-                        localStorage.clear();
+                        localStorage.setItem("token", null);
                         navigate("/login");
                       }}>
                       Logout
