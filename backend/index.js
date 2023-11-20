@@ -16,7 +16,10 @@ const conn = process.env.DataBase;
 const port = 8000 || process.env.PORT;
 
 // cors
-app.use(cors());
+app.use(cors({
+    origin: process.env.FrontEnd,
+    credentials: true,
+}));
 
 cloudinary.config({
     cloud_name: process.env.CloudName,
