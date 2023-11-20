@@ -15,6 +15,12 @@ const app = express();
 const conn = process.env.DataBase;
 const port = 8000 || process.env.PORT;
 
+// cors
+app.use(cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+}));
+
 cloudinary.config({
     cloud_name: process.env.CloudName,
     api_key: process.env.CloudKey,
@@ -40,12 +46,6 @@ mongoose.connect(conn, {
 }).then(() => {
     console.log("Database Connected");
 }).catch((err) => console.log(err.message));
-
-app.use(cors({
-    origin: process.env.FrontEnd,
-    methods: ['GET', 'POST', 'PATCH', 'DELETE', 'PUT'],
-    credentials: true,
-}));
 
 // home page, get every user posts
 app.get("/home", authenticate, async (req, res) => {
@@ -293,6 +293,12 @@ app.put("/updateprofile", authenticate, async (req, res) => {
     }
 });
 
-app.listen(port, () => {
+// get all users
+app.get("/allusers", authenticate, async (req, res) => {
+    const users = await User.find({});
+    res.status(201).json({ users: users });
+});
+
+app.listen(port, () => {    
     console.log(`Server is live on port ${port}`);
 });

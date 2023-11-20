@@ -62,7 +62,6 @@ HOME PAGE
 ****************************************************/
 .profilephoto {
     width: 3vw;
-
 }
 
 .homePage p {
@@ -72,7 +71,7 @@ HOME PAGE
 }
 
 .homePost {
-    height: 35vh;
+    /* height: 35vh; */
     object-fit: cover;
     border-radius: 0%;
 }
