@@ -1,6 +1,6 @@
 # Photogram-Friends
 
-This project is deployed on [Photgram-friends](https://photogram-friends.netlify.app/).
+This project is deployed on [Photgram-friends](https://photogram-friends.vercel.app/).
 
 ## Table of Contents
 
