@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import Navbar from "./Navbar";
 import { URL } from "../services/helper";
 
 const User = () => {
+  const navigate = useNavigate();
   const { username } = useParams();
   const [User, setUser] = useState("");
   const [loading, setLoading] = useState(false);
@@ -23,6 +24,11 @@ const User = () => {
 
       const data = await res.json();
 
+      if (res.status !== 201) {
+        const error = new Error(res.error);
+        setLoading(false);
+      }
+
       setUser({
         username: data.user.username,
         name: data.user.name,
@@ -35,14 +41,9 @@ const User = () => {
       });
 
       setLoading(false);
-
-      if (res.status !== 201) {
-        const error = new Error(res.error);
-        setLoading(false);
-        throw error;
-      }
     } catch (error) {
-      console.log(error.message);
+      console.log(err.message);
+      navigate("/login");
     }
   };
 

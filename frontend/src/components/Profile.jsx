@@ -24,6 +24,12 @@ const Profile = () => {
 
       const data = await res.json();
 
+      if (res.status !== 201) {
+        const error = new Error(res.error);
+        setLoading(false);
+        throw error;
+      }
+
       if (data.userpost === null) {
         setUserPost([]);
       } else {
@@ -44,11 +50,7 @@ const Profile = () => {
 
       setLoading(false);
 
-      if (res.status !== 201) {
-        const error = new Error(res.error);
-        setLoading(false);
-        throw error;
-      }
+     
     } catch (err) {
       console.log(err.message);
       navigate("/login");

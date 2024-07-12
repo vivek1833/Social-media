@@ -7,7 +7,7 @@ const auth = async (req, res, next) => {
         const verifyUser = verify(token, process.env.SecretKey);
         const currUser = await User.findOne({ _id: verifyUser._id });
 
-        if (!verifyUser) {
+        if (!verifyUser || !currUser) {
             throw new Error("User not found");
         }
 

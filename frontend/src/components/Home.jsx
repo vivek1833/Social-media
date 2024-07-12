@@ -118,7 +118,7 @@ const Home = () => {
                     return (
                       <div className="mt-4" key={post._id}>
                         <div className="card homePage h-100">
-                          <div className="card-footer">
+                          <div className="card-footer d-flex justify-content-between">
                             <Link
                               to={`/profile/${post.username}`}
                               className="text-decoration-none text-dark"
@@ -140,6 +140,9 @@ const Home = () => {
                                 </small>
                               </div>
                             </Link>
+                            <button className="btn btn-sm btn-secondary">
+                              Follow
+                            </button>
                           </div>
                           <div className="homePage">
                             <Link to={`/post/${post._id}`}>

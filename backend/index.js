@@ -17,8 +17,8 @@ const port = 8000 || process.env.PORT;
 
 // cors
 app.use(cors({
-    origin: process.env.FrontEnd,
-    credentials: true,
+    origin: ['http://localhost:3000', 'https://social-media-frontend-iu1c.onrender.com'],
+    credentials: true
 }));
 
 cloudinary.config({
