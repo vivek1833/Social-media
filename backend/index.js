@@ -10,6 +10,7 @@ const cookieParser = require('cookie-parser');
 const authenticate = require('./middleware/auth.js');
 const User = require('./models/user.js');
 const Post = require('./models/post.js');
+const Follower = require('./models/followers.js');
 
 const app = express();
 const conn = process.env.DataBase;
@@ -17,7 +18,7 @@ const port = 8000 || process.env.PORT;
 
 // cors
 app.use(cors({
-    origin: ['http://localhost:3000', 'https://social-media-frontend-iu1c.onrender.com'],
+    origin: process.env.FrontEnd,
     credentials: true
 }));
 
@@ -46,6 +47,11 @@ mongoose.connect(conn, {
 }).then(() => {
     console.log("Database Connected");
 }).catch((err) => console.log(err.message));
+
+// test API endpoint
+app.get('/', (req, res) => {
+    res.status(201).json({ message: "Server is live" });
+});
 
 // home page, get every user posts
 app.get("/home", authenticate, async (req, res) => {
@@ -148,11 +154,14 @@ app.post("/register", async (req, res) => {
             const token = jwt.sign({ _id: req.body._id }, process.env.SecretKey);
             await user.save();
 
+            // also create an empty instance in followers
+            const newUser = new Follower({ username: req.user.username, children: [], parents: [] });
+            await newUser.save();
+
             res.status(201).json({
                 token: token,
                 user: user
             });
-
         } else {
             res.status(400).json({ error: "Password are not matching" });
         }
@@ -289,7 +298,7 @@ app.put("/updateprofile", authenticate, async (req, res) => {
             res.status(400).json({ error: "User not found" });
         }
     } catch (error) {
-        console.log(error.message);
+        console.error(error.message);
     }
 });
 
@@ -299,6 +308,38 @@ app.get("/allusers", authenticate, async (req, res) => {
     res.status(201).json({ users: users });
 });
 
-app.listen(port, () => {    
+// follow a user 
+app.put("/follow/:username", authenticate, async (req, res) => {
+    try {
+        const user = await User.findOne({ username: req.params.username });
+
+        if (!user) {
+            res.status(400).json({ error: "User not found" });
+        }
+
+        const currentUser = await Follower.findOne({ username: req.user.username });
+        const loggedInUser = await Follower.findOne({ username: req.params.username });
+
+        // follow
+        if (!currentUser.children.includes(req.params.username) && !loggedInUser.parents.includes(req.user.username)) {
+
+            // follower increase
+            await Follower.updateOne({ username: req.user.username }, { $push: { children: { child: req.params.username } } });
+            await User.updateOne({ username: req.params.username }, { $inc: { followercount: 1 } });
+
+            // following increase
+            await Follower.updateOne({ username: req.params.username }, { $push: { parents: { parent: req.user.username } } });
+            await User.updateOne({ username: req.user.username }, { $inc: { followingcount: 1 } });
+
+            res.status(201).json({ message: "Followed" });
+        } else {
+            res.status(400).json({ error: "Already followed" });
+        }
+    } catch (error) {
+        console.error(error.message);
+    }
+});
+
+app.listen(port, () => {
     console.log(`Server is live on port ${port}`);
 });

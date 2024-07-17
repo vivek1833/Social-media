@@ -93,6 +93,33 @@ const Home = () => {
     setAllUser(data);
   };
 
+  const followUser = async (username) => {
+    try {
+      const res = await fetch(`${URL}/follow/${username}`, {
+        method: "PUT",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          token: localStorage.getItem("token"),
+        },
+        credentials: "include",
+      });
+
+      const data = await res.json();
+
+      console.log(data);
+
+      if (res.status !== 201) {
+        const error = new Error(res.error);
+        throw error;
+      }
+
+      getAllUsers();
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
+
   useEffect(() => {
     callHome();
     getAllUsers();
@@ -140,7 +167,14 @@ const Home = () => {
                                 </small>
                               </div>
                             </Link>
-                            <button className="btn btn-sm btn-secondary">
+
+                            {/* follow button */}
+                            <button
+                              className="btn btn-secondary"
+                              id="follow"
+                              onClick={() => {
+                                followUser(post.username);
+                              }}>
                               Follow
                             </button>
                           </div>

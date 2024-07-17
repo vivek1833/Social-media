@@ -3,18 +3,20 @@ const mongoose = require('mongoose');
 const followerSchema = new mongoose.Schema({
     username: {
         type: String,
+        unique: true,
+        ref: 'USER',
     },
-    followers: [{
-        follower: {
+    children: [{
+        child: {
             type: String,
         }
     }],
-    following: [{
-        follow: {
+    parents: [{
+        parent: {
             type: String,
         }
-    }]
+    }],
 });
 
-const Followers = new mongoose.model('POST', followerSchema);
+const Followers = new mongoose.model('FOLLOWERS', followerSchema);
 module.exports = Followers;
