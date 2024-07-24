@@ -8,6 +8,8 @@ const Home = () => {
   const [user, setUser] = useState([]);
   const [loading, setLoading] = useState(false);
   const [allUser, setAllUser] = useState([]);
+  const [loggedInUser, setLoggedInUser] = useState();
+  const [userFollowers, setUserFollowers] = useState([]);
 
   if (!localStorage.getItem("token")) {
     navigate("/login");
@@ -35,6 +37,8 @@ const Home = () => {
         const error = new Error(res.error);
         throw error;
       }
+
+      callHome();
     } catch (err) {
       console.log(err.message);
     }
@@ -55,9 +59,11 @@ const Home = () => {
 
       const data = await res.json();
 
+      setLoggedInUser(data.user);
       setUser({
         userdata: data.posts,
       });
+      setUserFollowers(data.followers);
 
       setLoading(false);
 
@@ -107,14 +113,14 @@ const Home = () => {
 
       const data = await res.json();
 
-      console.log(data);
-
       if (res.status !== 201) {
         const error = new Error(res.error);
         throw error;
       }
 
-      getAllUsers();
+      alert(data.message);
+
+      callHome();
     } catch (err) {
       console.log(err.message);
     }
@@ -168,15 +174,25 @@ const Home = () => {
                               </div>
                             </Link>
 
-                            {/* follow button */}
-                            <button
-                              className="btn btn-secondary"
-                              id="follow"
-                              onClick={() => {
-                                followUser(post.username);
-                              }}>
-                              Follow
-                            </button>
+                            {userFollowers.includes(post.username) ? (
+                              <button
+                                className="btn btn-secondary"
+                                id="follow"
+                                onClick={() => {
+                                  followUser(post.username);
+                                }}>
+                                Unfollow
+                              </button>
+                            ) : (
+                              <button
+                                className="btn btn-secondary"
+                                id="follow"
+                                onClick={() => {
+                                  followUser(post.username);
+                                }}>
+                                Follow
+                              </button>
+                            )}
                           </div>
                           <div className="homePage">
                             <Link to={`/post/${post._id}`}>
@@ -210,18 +226,39 @@ const Home = () => {
                             </div>
 
                             <div className="card-footer">
-                              <button
-                                className="btn"
-                                id="like"
-                                onClick={() => {
-                                  likePost(post._id);
-                                }}>
-                                <i className="bi bi-heart"></i>
-                              </button>
+                              {post.likes.filter(
+                                (like) => like.user === loggedInUser.username
+                              ).length > 0 ? (
+                                <>
+                                  <button
+                                    className="btn"
+                                    id="like"
+                                    onClick={() => {
+                                      likePost(post._id);
+                                    }}>
+                                    <i className="bi bi-heart-fill text-danger"></i>
+                                  </button>
 
-                              <small className="text-muted text-end">
-                                {post.likes.length} likes
-                              </small>
+                                  <small className="text-muted text-end">
+                                    {post.likes.length} likes
+                                  </small>
+                                </>
+                              ) : (
+                                <>
+                                  <button
+                                    className="btn"
+                                    id="like"
+                                    onClick={() => {
+                                      likePost(post._id);
+                                    }}>
+                                    <i className="bi bi-heart"></i>
+                                  </button>
+
+                                  <small className="text-muted text-end">
+                                    {post.likes.length} likes
+                                  </small>
+                                </>
+                              )}
                               <Link
                                 to={`/post/${post._id}`}
                                 className="text-decoration-none text-dark">

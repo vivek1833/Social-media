@@ -18,7 +18,9 @@ const port = 8000 || process.env.PORT;
 
 // cors
 app.use(cors({
-    origin: process.env.FrontEnd,
+    origin: [
+        "http://localhost:3000",
+    ],
     credentials: true
 }));
 
@@ -57,8 +59,11 @@ app.get('/', (req, res) => {
 app.get("/home", authenticate, async (req, res) => {
     try {
         const posts = await Post.find({});
+        const loggedInUserFollowers = await Follower.find({ username: req.user.username });
+        const usernames = loggedInUserFollowers[0].parents.map((user) => user.parent);
         posts.reverse();
-        res.status(201).json({ posts: posts, user: req.user });
+
+        res.status(201).json({ posts: posts, user: req.user, followers: usernames });
 
     } catch (error) {
         console.log(error.message);
@@ -317,23 +322,32 @@ app.put("/follow/:username", authenticate, async (req, res) => {
             res.status(400).json({ error: "User not found" });
         }
 
-        const currentUser = await Follower.findOne({ username: req.user.username });
-        const loggedInUser = await Follower.findOne({ username: req.params.username });
+        const currentUser = await Follower.findOne({ username: req.params.username });
+        const loggedInUser = await Follower.findOne({ username: req.user.username });
+        const isFollowing = currentUser.children.filter((child) => child.child === req.user.username).length > 0;
 
         // follow
-        if (!currentUser.children.includes(req.params.username) && !loggedInUser.parents.includes(req.user.username)) {
+        if (!isFollowing) {
 
             // follower increase
-            await Follower.updateOne({ username: req.user.username }, { $push: { children: { child: req.params.username } } });
+            await Follower.updateOne({ username: req.user.username }, { $push: { parents: { parent: req.params.username } } });
             await User.updateOne({ username: req.params.username }, { $inc: { followercount: 1 } });
 
             // following increase
-            await Follower.updateOne({ username: req.params.username }, { $push: { parents: { parent: req.user.username } } });
+            await Follower.updateOne({ username: req.params.username }, { $push: { children: { child: req.user.username } } });
             await User.updateOne({ username: req.user.username }, { $inc: { followingcount: 1 } });
 
             res.status(201).json({ message: "Followed" });
         } else {
-            res.status(400).json({ error: "Already followed" });
+            
+            // unfollow
+            await Follower.updateOne({ username: req.user.username }, { $pull: { parents: { parent: req.params.username } } });
+            await User.updateOne({ username: req.params.username }, { $inc: { followercount: -1 } });
+
+            await Follower.updateOne({ username: req.params.username }, { $pull: { children: { child: req.user.username } } });
+            await User.updateOne({ username: req.user.username }, { $inc: { followingcount: -1 } });
+
+            res.status(201).json({ message: "Unfollowed" });
         }
     } catch (error) {
         console.error(error.message);
